@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<base href="https://healthykitchen.delivery/" />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://unpkg.com" crossorigin />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gut Smart Catering | Healthy Kitchen</title>
+<meta name="description" content="Fully gluten-free, gut-friendly catering in Dubai, with AIP, Low FODMAP and sugar-free options, for corporate events, private gatherings, wellness retreats and special occasions." />
+<link rel="icon" href="assets/brand/healthy-kitchen-logo.png" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="responsive.css" />
+<style>
+  html, body { margin: 0; }
+  body { background: var(--bg-page); }
+  image-slot { border-radius: var(--radius-lg); }
+  /* S2/S3: #hk-prerender carries genuine static body content (a real element,
+     not a script-hidden fallback tag) so non-JS crawlers/curl see real markup.
+     F02 (14 Sep 2026): .js is added to the html element only once the React
+     application has committed its first render (a layout effect in the mount
+     script, before that frame paints), so the static content stays usable
+     until the app is actually on screen. If React, ReactDOM, Babel or an
+     application script fails to load, or the root render throws, the class
+     is never added (or is removed by the root boundary) and the static
+     content, with its contact link, remains. A JS-disabled browser never
+     gets the class, so the rule never matches and the static content
+     renders normally.
+     BOOT SEQUENCING (15 Sep 2026): hk-booting is added synchronously by the
+     head script below while a boot is in progress, so a healthy load never
+     paints the static content at all; the head script removes it again the
+     moment the boot demonstrably fails (or after its watchdog), and the
+     mount script removes it at the first commit. */
+  .hk-booting #hk-prerender, .js #hk-prerender { display: none; }
+  /* T-CONSENT: minimal, non-blocking cookie-consent banner. Fixed bottom bar,
+     shown only until an explicit choice is stored; never covers more than a
+     thin strip so it never blocks reading, the calculator, cart or checkout. */
+  #hk-consent-banner {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center; gap: var(--space-5);
+    flex-wrap: wrap; padding: var(--space-4) var(--space-5);
+    background: var(--green-900); color: var(--white);
+    box-shadow: var(--shadow-lg); font-family: var(--font-body);
+  }
+  #hk-consent-text { margin: 0; max-width: 60ch; font-size: 0.875rem; line-height: 1.5; color: var(--white); }
+  #hk-consent-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+  #hk-consent-banner button {
+    font-family: var(--font-body); font-size: 0.875rem; cursor: pointer;
+    padding: var(--space-2) var(--space-5); border-radius: var(--radius-pill); border: 1px solid var(--white);
+  }
+  #hk-consent-accept { background: var(--white); color: var(--green-900); }
+  #hk-consent-reject { background: transparent; color: var(--white); }
+  @media (max-width: 640px) {
+    #hk-consent-banner { justify-content: flex-start; text-align: left; }
+    #hk-consent-actions { width: 100%; }
+    #hk-consent-actions button { flex: 1 1 auto; }
+  }
+</style>
+<script>
+  // BOOT SEQUENCING (15 Sep 2026): while a healthy boot is in progress the
+  // static #hk-prerender is kept off screen (hk-booting on <html>, set here
+  // synchronously, before first paint), so a normal load never shows the raw
+  // fallback before the application paints. It is put back the moment the
+  // boot demonstrably fails - a boot script that cannot load, an uncaught
+  // error while booting, a root render that throws (mount script) - and, as
+  // a last resort, when no first commit has happened within the watchdog
+  // deadline. F02 is unchanged in substance: a real failure still ends with
+  // the static content on screen; only a healthy load no longer exposes it.
+  // A JS-disabled browser never runs this, so the static content renders
+  // normally there.
+  (function () {
+    var html = document.documentElement;
+    var BOOT_WATCHDOG_MS = 8000;
+    html.classList.add("hk-booting");
+    function booted() { return html.classList.contains("js"); }
+    function reveal() { html.classList.remove("hk-booting"); }
+    window.HK_BOOT_REVEAL = reveal;
+    // Critical boot dependencies only: this site's own scripts and the pinned
+    // React, ReactDOM and Babel builds. A tag manager, analytics or any other
+    // third-party script (including a muted cross-origin error, which carries
+    // no file name) never reveals the fallback; the watchdog still covers
+    // everything else (15 Sep 2026 audit).
+    function critical(url) {
+      url = String(url || "");
+      return url.indexOf(location.origin + "/") === 0 ||
+        /^https:\/\/unpkg\.com\/(react@|react-dom@|@babel\/standalone@)/.test(url);
+    }
+    window.addEventListener("error", function (event) {
+      if (booted()) return;
+      var target = event.target;
+      if (target && target !== window) {
+        // A resource that failed to load: only a critical boot script matters.
+        if (target.tagName === "SCRIPT" && critical(target.src)) reveal();
+        return;
+      }
+      // An uncaught exception while booting, from this page's own scripts or
+      // the pinned runtime (Babel reports a page script it could not load
+      // this way).
+      if (critical(event.filename)) reveal();
+    }, true);
+    setTimeout(function () { if (!booted()) reveal(); }, BOOT_WATCHDOG_MS);
+  })();
+</script>
+</head>
+<body data-route-path="/">
+<div id="root"></div>
+<div id="hk-prerender"></div>
+
+<script>
+window.HK_ASSET_BASE = "";
+(function () {
+  const whatsappUrl = "https://wa.me/971585129792";
+  const allowedLocations = Object.freeze({
+    "general-enquiry": "about",
+    "consultation-booking": "consultations",
+    "intolerance-testing-booking": "intolerance-testing",
+    "programme-enquiry": "programme-detail",
+  });
+  const pageIdPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  const programmes = new Set(["longevity", "gut-healing", "autoimmune", "low-fodmap", "muscle-up", "anticandida", "easy-detox", "detox-cleanse"]);
+  const mealConfigurations = new Set(["full", "am", "pm", "main"]);
+  const calorieBands = new Set(["800–1000", "900–1100", "1000–1200", "1100–1300", "1200–1400", "1200–1500", "1300–1500", "1400–1500", "1500–1600", "1600–1800", "1900–2200"]);
+  // Every orderable day count: the cart's authoritative range is
+  // min(3, smallest reference duration)..31 (duration-slabs.ts cartDayRange;
+  // Detox & Cleanse references 1-3 days), so tracking accepts 1..31 (T6).
+  const durations = new Set(Array.from({ length: 31 }, (_, index) => index + 1));
+
+  function pushEvent(event, params, options) {
+    if (window.HK_ANALYTICS_ENABLED !== true) return false;
+    try {
+      if (!Array.isArray(window.dataLayer)) window.dataLayer = [];
+      // _clear:true resets GTM's merged model so an items/ecommerce block from
+      // one event never leaks into the next (T5). Applied to every ecommerce push.
+      const payload = options && options.clear ? { event, _clear: true } : { event };
+      Object.keys(params || {}).forEach(function (k) { payload[k] = params[k]; });
+      window.dataLayer.push(Object.freeze(payload));
+      return true;
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function safePageId(value) {
+    return typeof value === "string" && value.length <= 120 && pageIdPattern.test(value);
+  }
+
+  function trackLandingPage(pageId) {
+    return safePageId(pageId) && pushEvent("landing_page_view", { page_id: pageId });
+  }
+
+  function trackBlogView(articleSlug) {
+    return safePageId(articleSlug) && pushEvent("blog_view", { article_slug: articleSlug, content_group: "blog" });
+  }
+
+  function trackCalculatorStart(pageId) {
+    return safePageId(pageId) && programmes.has(pageId) &&
+      pushEvent("calculator_start", { page_id: pageId, programme: pageId });
+  }
+
+  // Deduped per session by a hash of the selection, so it fires once per
+  // distinct valid configuration rather than on every control change.
+  const seenCalculatorSelections = new Set();
+  function trackCalculatorCompletion(pageId, selection, valueMinor) {
+    if (!safePageId(pageId) || !selection || !programmes.has(pageId) ||
+        selection.programme !== pageId || !mealConfigurations.has(selection.mealConfiguration) ||
+        !calorieBands.has(selection.calorieBand) || !durations.has(selection.durationDays)) return false;
+    const hash = pageId + "|" + selection.mealConfiguration + "|" + selection.calorieBand + "|" + selection.durationDays;
+    if (seenCalculatorSelections.has(hash)) return false;
+    seenCalculatorSelections.add(hash);
+    return pushEvent("calculator_completion", {
+      page_id: pageId,
+      programme: selection.programme,
+      meal_configuration: selection.mealConfiguration,
+      calorie_band: selection.calorieBand,
+      duration_days: selection.durationDays,
+      ...(money(valueMinor) !== null ? { value: money(valueMinor) } : {}),
+    });
+  }
+
+  // First-touch attribution: capture utm_source / utm_campaign / page_id once
+  // into sessionStorage so wa.me traffic (otherwise unattributable) can carry it.
+  const CTA_POSITION_WHITELIST = new Set(["hero", "mid", "footer", "sticky", "nav"]);
+  (function captureFirstTouch() {
+    try {
+      if (sessionStorage.getItem("hk_first_touch")) return;
+      const q = new URLSearchParams(location.search);
+      const ft = {
+        utm_source: (q.get("utm_source") || "").slice(0, 60),
+        utm_campaign: (q.get("utm_campaign") || "").slice(0, 60),
+        page_id: (location.pathname || "/").slice(0, 120),
+      };
+      sessionStorage.setItem("hk_first_touch", JSON.stringify(ft));
+    } catch (_error) { /* storage unavailable */ }
+  })();
+  // Non-customer-visible attribution only: read once, attach to the GTM
+  // dataLayer events below. Never appended to the WhatsApp message text a
+  // customer actually sees (25 Sep 2026, customer-experience fix) - wa.me
+  // traffic remains attributable through these dataLayer fields instead.
+  function firstTouchAttribution() {
+    try {
+      const ft = JSON.parse(sessionStorage.getItem("hk_first_touch") || "{}");
+      const attribution = {};
+      if (ft.utm_source) attribution.utm_source = ft.utm_source;
+      if (ft.utm_campaign) attribution.utm_campaign = ft.utm_campaign;
+      return attribution;
+    } catch (_error) { return {}; }
+  }
+  // The exact display name each plan's page uses (window.HK_PLANS, from
+  // data.js). Falls back to the generic message below if a plan isn't found
+  // (data.js not yet loaded, or pageId isn't a plan slug).
+  function planDisplayName(pageId) {
+    const plans = Array.isArray(window.HK_PLANS) ? window.HK_PLANS : [];
+    const plan = plans.find(function (candidate) { return candidate && candidate.slug === pageId; });
+    return plan && typeof plan.name === "string" ? plan.name : null;
+  }
+  function whatsAppMessageText(input) {
+    if (input.intent === "programme-enquiry") {
+      const name = planDisplayName(input.pageId);
+      if (name) {
+        return "Hi Healthy Kitchen 👋\n\nI’m interested in your " + name +
+          " and would like to know more about the plan, pricing and delivery options.";
+      }
+    }
+    return "Hi Healthy Kitchen 👋\n\nI’m interested in your meal plans and would like some more " +
+      "information about the available programmes, pricing and delivery options.";
+  }
+  function openWhatsApp(input) {
+    if (!input || allowedLocations[input.intent] !== input.ctaLocation ||
+        !safePageId(input.pageId)) return false;
+    // cta_location prefers an explicit position (hero|mid|footer|sticky|nav) so
+    // the several CTAs on a page no longer all report the same location.
+    const location_ = (typeof input.position === "string" && CTA_POSITION_WHITELIST.has(input.position))
+      ? input.position : input.ctaLocation;
+    const attribution = firstTouchAttribution();
+    pushEvent("whatsapp_handoff", Object.assign({ whatsapp_intent: input.intent, cta_location: location_, page_id: input.pageId }, attribution));
+    // generate_lead is the brief's Meta Lead signal for a WhatsApp hand-off.
+    pushEvent("generate_lead", Object.assign({ whatsapp_intent: input.intent, cta_location: location_, page_id: input.pageId, lead_type: "whatsapp" }, attribution));
+    const url = whatsappUrl + (whatsappUrl.indexOf("?") === -1 ? "?text=" : "&text=")
+      + encodeURIComponent(whatsAppMessageText(input));
+    const opened = window.open(url, "_blank", "noopener,noreferrer");
+    if (opened) opened.opener = null;
+    return true;
+  }
+
+  // ---- GA4/Meta dataLayer tracking (default-off, runtime-flag gated) --------
+  // GTM-NCHWZCT3 is loaded and the dataLayer enabled ONLY when the deployment
+  // sets window.HK_RUNTIME_FLAGS.trackingEnabled === true (a consented,
+  // tracking-approved deployment). With the flag absent the site behaves
+  // exactly as before: no GTM request and every push below is a no-op, because
+  // pushEvent returns early while HK_ANALYTICS_ENABLED !== true. GTM is the only
+  // delivery layer — GA4 and Meta are never embedded in this file. No PII is
+  // ever pushed: only programme/plan/selection identifiers and money.
+  const trackingEnabled = !!(window.HK_RUNTIME_FLAGS && window.HK_RUNTIME_FLAGS.trackingEnabled === true);
+  // An explicit true set before this script runs (e.g. a test's addInitScript,
+  // or any future consent/init step) is a deliberate opt-in and must survive -
+  // this bootstrap only ever ADDS the GTM-driven enablement, never removes an
+  // enablement someone else already granted. Default (untouched) behavior is
+  // unchanged: HK_ANALYTICS_ENABLED starts undefined, so this is exactly
+  // trackingEnabled, same as before.
+  window.HK_ANALYTICS_ENABLED = window.HK_ANALYTICS_ENABLED === true || trackingEnabled;
+  const GTM_CONTAINER_ID = "GTM-NCHWZCT3";
+  // T-CONSENT: Google Consent Mode v2, region-aware (post-release hardening,
+  // 15 Sep 2026). Loading the GTM container is not itself measurement, so it
+  // still loads whenever this deployment has tracking enabled. The default is
+  // DENIED for visitors in the EEA, the UK and Switzerland (Google applies the
+  // region-scoped default by the visitor's location, and a region-scoped
+  // default always wins over the global one) and GRANTED elsewhere - the
+  // site's audience is UAE-centric. Google tags honour the consent state
+  // natively; the Meta tags in the container must require ad_storage (see
+  // docs/tracking/GTM_RUNBOOK.md). A stored explicit choice - accept or reject
+  // - is re-applied immediately in every region, so returning visitors are
+  // never re-prompted and never lose the choice they already made.
+  const CONSENT_STORAGE_KEY = "hk_consent_choice";
+  const CONSENT_FIELDS = ["ad_storage", "ad_user_data", "ad_personalization", "analytics_storage"];
+  const CONSENT_REQUIRED_REGIONS = [
+    "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK",
+    "IS", "LI", "NO",
+    "GB",
+    "CH",
+  ];
+  function consentState(granted) {
+    const state = {};
+    CONSENT_FIELDS.forEach(function (field) { state[field] = granted ? "granted" : "denied"; });
+    return state;
+  }
+  function readStoredConsent() {
+    try {
+      const value = localStorage.getItem(CONSENT_STORAGE_KEY);
+      return value === "granted" || value === "rejected" ? value : null;
+    } catch (_error) { return null; }
+  }
+  function storeConsent(value) {
+    try { localStorage.setItem(CONSENT_STORAGE_KEY, value); } catch (_error) { /* best effort */ }
+  }
+  window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+  if (trackingEnabled) {
+    window.dataLayer = window.dataLayer || [];
+    // Consent defaults must be pushed before gtm.js is requested below, so the
+    // container never has a window where consent is unset. Region-scoped
+    // default first, then the global default.
+    const regionDefault = consentState(false);
+    regionDefault.region = CONSENT_REQUIRED_REGIONS;
+    regionDefault.wait_for_update = 500;
+    window.gtag("consent", "default", regionDefault);
+    window.gtag("consent", "default", consentState(true));
+    const storedConsent = readStoredConsent();
+    if (storedConsent === "granted") window.gtag("consent", "update", consentState(true));
+    if (storedConsent === "rejected") window.gtag("consent", "update", consentState(false));
+  }
+  // A dataLayer event on an explicit choice, so container tags gated on
+  // ad_storage (Meta) can fire on the page where consent was granted instead
+  // of only from the next page load.
+  function announceConsent(granted) {
+    try { window.dataLayer.push({ event: "hk_consent_update", hk_consent: granted ? "granted" : "denied" }); } catch (_error) { /* best effort */ }
+  }
+  if (trackingEnabled && !window.HK_GTM_LOADED) {
+    window.HK_GTM_LOADED = true;
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
+    const firstScript = document.getElementsByTagName("script")[0];
+    const gtmScript = document.createElement("script");
+    gtmScript.async = true;
+    gtmScript.src = "https://www.googletagmanager.com/gtm.js?id=" + GTM_CONTAINER_ID;
+    firstScript.parentNode.insertBefore(gtmScript, firstScript);
+  }
+  // Minimal, non-blocking consent banner: only for deployments where tracking
+  // exists at all, and only until the visitor has made an explicit choice.
+  // Rendered outside #root as a plain DOM node so it survives every SPA route
+  // change untouched and is never re-prompted mid-session.
+  function hideConsentBanner(banner) {
+    if (banner && banner.parentNode) banner.parentNode.removeChild(banner);
+  }
+  function showConsentBanner() {
+    const banner = document.createElement("div");
+    banner.id = "hk-consent-banner";
+    banner.setAttribute("role", "region");
+    banner.setAttribute("aria-label", "Cookie consent");
+    const text = document.createElement("p");
+    text.id = "hk-consent-text";
+    text.textContent = "We use cookies to understand how our site is used and to improve your experience. "
+      + "You can accept analytics/marketing cookies or reject non-essential ones.";
+    const actions = document.createElement("div");
+    actions.id = "hk-consent-actions";
+    const rejectButton = document.createElement("button");
+    rejectButton.type = "button";
+    rejectButton.id = "hk-consent-reject";
+    rejectButton.textContent = "Reject non-essential";
+    const acceptButton = document.createElement("button");
+    acceptButton.type = "button";
+    acceptButton.id = "hk-consent-accept";
+    acceptButton.textContent = "Accept analytics/marketing";
+    actions.appendChild(rejectButton);
+    actions.appendChild(acceptButton);
+    banner.appendChild(text);
+    banner.appendChild(actions);
+    document.body.appendChild(banner);
+    acceptButton.addEventListener("click", function () {
+      window.gtag("consent", "update", consentState(true));
+      storeConsent("granted");
+      announceConsent(true);
+      hideConsentBanner(banner);
+    });
+    rejectButton.addEventListener("click", function () {
+      window.gtag("consent", "update", consentState(false));
+      storeConsent("rejected");
+      announceConsent(false);
+      hideConsentBanner(banner);
+    });
+  }
+  if (trackingEnabled && readStoredConsent() === null) {
+    showConsentBanner();
+  }
+
+  const trackingCurrency = "AED";
+  const CTA_POSITIONS = new Set(["hero", "mid", "footer", "sticky", "nav"]);
+  function money(minor) {
+    return typeof minor === "number" && Number.isSafeInteger(minor) && minor >= 0 ? Math.round(minor) / 100 : null;
+  }
+  function safeText(value, max) {
+    return typeof value === "string" && value.length <= (max || 120) ? value : undefined;
+  }
+  // Canonical GA4 item — reuses the cart/quote line. price is per day and
+  // quantity is the number of days, so price x quantity = the quoted subtotal.
+  // Never a hardcoded price; the caller passes perDayMinor from /api/quote.
+  function buildItem(programme, selection, perDayMinor, name) {
+    if (!programmes.has(programme)) return null;
+    const item = { item_id: programme, item_name: safeText(name, 80) || programme, item_category: "meal_plan", item_category2: programme };
+    if (selection && mealConfigurations.has(selection.mealConfiguration) &&
+        calorieBands.has(selection.calorieBand) && durations.has(selection.durationDays)) {
+      item.item_variant = selection.mealConfiguration + "|" + selection.calorieBand + "|" + selection.durationDays + "d";
+      item.quantity = selection.durationDays;
+      const per = money(perDayMinor);
+      if (per !== null) item.price = per;
+    }
+    return item;
+  }
+  // Every ecommerce push: currency AED, value = subtotal - discount EXCLUDING
+  // the refundable deposit; deposit_amount and discount_amount are separate.
+  function ecom(event, opts) {
+    opts = opts || {};
+    const params = { currency: trackingCurrency };
+    if (Array.isArray(opts.items) && opts.items.length) params.items = opts.items;
+    const value = money(opts.valueMinor);
+    if (value !== null) params.value = value;
+    const deposit = money(opts.depositMinor);
+    if (deposit !== null && deposit > 0) params.deposit_amount = deposit;
+    const discount = money(opts.discountMinor);
+    if (discount !== null && discount > 0) params.discount_amount = discount;
+    if (opts.extra) Object.keys(opts.extra).forEach(function (k) { if (opts.extra[k] !== undefined) params[k] = opts.extra[k]; });
+    return pushEvent(event, params, { clear: true });
+  }
+  function trackPageView(input) {
+    input = input || {};
+    return pushEvent("page_view", {
+      ...(safeText(input.page_path, 512) ? { page_path: input.page_path } : {}),
+      ...(safeText(input.page_title, 300) ? { page_title: input.page_title } : {}),
+      ...(safePageId(input.page_id) ? { page_id: input.page_id } : { page_id: null }),
+      ...(safeText(input.route_name, 40) ? { route_name: input.route_name } : {}),
+    });
+  }
+  function trackViewItem(programme, name, perDayMinor, selection, valueMinor) {
+    const item = buildItem(programme, selection, perDayMinor, name);
+    if (!item) return false;
+    return ecom("view_item", { items: [item], valueMinor, extra: { programme } });
+  }
+  function trackAddToCart(line) {
+    line = line || {};
+    const item = buildItem(line.programme, line.selection, line.perDayMinor, line.name);
+    if (!item) return false;
+    return ecom("add_to_cart", { items: [item], valueMinor: line.valueMinor, depositMinor: line.depositMinor });
+  }
+  function itemsFromLines(lines) {
+    return (Array.isArray(lines) ? lines : []).map(function (l) {
+      return buildItem(l.programme, l.selection, l.perDayMinor, l.name);
+    }).filter(Boolean);
+  }
+  function trackViewCart(lines, valueMinor) {
+    return ecom("view_cart", { items: itemsFromLines(lines), valueMinor });
+  }
+  function trackRemoveFromCart(lines, valueMinor) {
+    return ecom("remove_from_cart", { items: itemsFromLines(lines), valueMinor });
+  }
+  function trackBeginCheckout(lines, valueMinor, depositMinor) {
+    return ecom("begin_checkout", { items: itemsFromLines(lines), valueMinor, depositMinor });
+  }
+  function trackPromo(applied, info) {
+    info = info || {};
+    return pushEvent(applied ? "promo_applied" : "promo_rejected", {
+      ...(safeText(info.promo_code, 40) ? { promo_code: info.promo_code } : {}),
+      ...(money(info.discountMinor) !== null ? { discount_amount: money(info.discountMinor) } : {}),
+      ...(safeText(info.reject_reason, 60) ? { reject_reason: info.reject_reason } : {}),
+    });
+  }
+  function trackShippingInfo(lines, valueMinor, area, slot) {
+    return ecom("add_shipping_info", { items: itemsFromLines(lines), valueMinor,
+      extra: { ...(safeText(area, 60) ? { delivery_area: area } : {}), ...(safeText(slot, 60) ? { delivery_slot: slot } : {}) } });
+  }
+  function trackPaymentInfo(lines, valueMinor, paymentType, eventId) {
+    return ecom("add_payment_info", { items: itemsFromLines(lines), valueMinor,
+      extra: { ...(safeText(paymentType, 40) ? { payment_type: paymentType } : {}), ...(safeText(eventId, 128) ? { event_id: eventId } : {}) } });
+  }
+  const PURCHASE_KEY_PREFIX = "hk_purchase_tracked:";
+  function purchaseAlreadyTracked(transactionId) {
+    // Session storage covers refresh and re-poll in the tab; local storage
+    // (post-release hardening, 15 Sep 2026) covers the same return URL opened
+    // in a second tab. Either marker suppresses the push.
+    try { if (sessionStorage.getItem(PURCHASE_KEY_PREFIX + transactionId) === "1") return true; } catch (_error) { /* unavailable storage is not a marker */ }
+    try { return localStorage.getItem(PURCHASE_KEY_PREFIX + transactionId) === "1"; } catch (_error) { return false; }
+  }
+  // T7 user_id: SHA-256 (hex) of the customer's contact number, normalised to
+  // international digits (no "+", a leading "00" dropped, a UAE local
+  // 0XXXXXXXXX becomes 971XXXXXXXXX). Computed after the checkout request
+  // succeeded and kept only as the hash, per merchant reference, in this tab's
+  // session; the raw number never enters the dataLayer or storage. Fire and
+  // forget: any failure (no WebCrypto, storage blocked) just omits user_id.
+  const USER_HASH_KEY_PREFIX = "hk_purchase_uid:";
+  const HASH_PATTERN = /^[a-f0-9]{64}$/;
+  function normaliseContactNumber(value) {
+    if (typeof value !== "string") return null;
+    let digits = value.replace(/\D/g, "");
+    if (digits.indexOf("00") === 0) digits = digits.slice(2);
+    if (digits.length === 10 && digits.charAt(0) === "0") digits = "971" + digits.slice(1);
+    return digits.length >= 8 && digits.length <= 15 ? digits : null;
+  }
+  function rememberPurchaseUser(transactionId, contactNumber) {
+    try {
+      if (window.HK_ANALYTICS_ENABLED !== true) return false;
+      if (typeof transactionId !== "string" || !/^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(transactionId)) return false;
+      const digits = normaliseContactNumber(contactNumber);
+      const subtle = window.crypto && window.crypto.subtle;
+      if (digits === null || !subtle || typeof TextEncoder !== "function") return false;
+      subtle.digest("SHA-256", new TextEncoder().encode(digits)).then(function (buffer) {
+        const hex = Array.from(new Uint8Array(buffer), function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+        try { sessionStorage.setItem(USER_HASH_KEY_PREFIX + transactionId, hex); } catch (_error) { /* best effort */ }
+      }, function () { /* hashing unavailable: purchase is sent without user_id */ });
+      return true;
+    } catch (_error) {
+      return false;
+    }
+  }
+  function purchaseUserId(transactionId) {
+    try {
+      const stored = sessionStorage.getItem(USER_HASH_KEY_PREFIX + transactionId);
+      return typeof stored === "string" && HASH_PATTERN.test(stored) ? stored : null;
+    } catch (_error) {
+      return null;
+    }
+  }
+  // Fire ONLY from the durable /api/payments/status "paid" read-back, exactly
+  // once per transaction (deduped by session and local storage on the merchant reference).
+  // value EXCLUDES the refundable deposit (net). event_id = purchase_<ref> so
+  // the browser event dedupes against the future server-side CAPI event (T8).
+  function trackPurchase(input) {
+    input = input || {};
+    if (typeof input.transactionId !== "string" ||
+        !/^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$/.test(input.transactionId)) return false;
+    if (input.paymentState !== "paid") return false;
+    const value = money(input.netAmountMinor !== undefined ? input.netAmountMinor : input.valueMinor);
+    if (value === null || value <= 0) return false;
+    if (purchaseAlreadyTracked(input.transactionId)) return false;
+    try { sessionStorage.setItem(PURCHASE_KEY_PREFIX + input.transactionId, "1"); } catch (_error) { /* best effort */ }
+    try { localStorage.setItem(PURCHASE_KEY_PREFIX + input.transactionId, "1"); } catch (_error) { /* best effort */ }
+    return ecom("purchase", {
+      items: Array.isArray(input.items) ? input.items : undefined,
+      valueMinor: input.netAmountMinor !== undefined ? input.netAmountMinor : input.valueMinor,
+      depositMinor: input.depositMinor,
+      discountMinor: input.discountMinor,
+      extra: {
+        transaction_id: input.transactionId,
+        event_id: "purchase_" + input.transactionId,
+        ...(purchaseUserId(input.transactionId) !== null ? { user_id: purchaseUserId(input.transactionId) } : {}),
+        currency: (typeof input.currency === "string" && /^[A-Z]{3}$/.test(input.currency)) ? input.currency : trackingCurrency,
+        ...(safeText(input.promo_code, 40) ? { promo_code: input.promo_code } : {}),
+      },
+    });
+  }
+  function trackPaymentFailed(transactionId, failureState, valueMinor) {
+    return pushEvent("payment_failed", {
+      ...(safeText(transactionId, 128) ? { transaction_id: transactionId } : {}),
+      ...(safeText(failureState, 40) ? { failure_state: failureState } : {}),
+      ...(money(valueMinor) !== null ? { value: money(valueMinor) } : {}),
+    });
+  }
+  function trackGenerateLead(leadType) {
+    return pushEvent("generate_lead", { lead_type: safeText(leadType, 40) || "enquiry" });
+  }
+  function trackFormError(formName, errorField, errorCount) {
+    return pushEvent("form_error", {
+      form_name: safeText(formName, 40) || "unknown",
+      ...(safeText(errorField, 60) ? { error_field: errorField } : {}),
+      ...(Number.isSafeInteger(errorCount) ? { error_count: errorCount } : {}),
+    });
+  }
+  function trackApiError(apiEndpoint, httpStatus, errorCode) {
+    return pushEvent("api_error", {
+      api_endpoint: safeText(apiEndpoint, 80) || "unknown",
+      ...(Number.isSafeInteger(httpStatus) ? { http_status: httpStatus } : {}),
+      ...(safeText(errorCode, 60) ? { error_code: errorCode } : {}),
+    });
+  }
+  function trackNotFound(pagePath, referrer) {
+    return pushEvent("page_not_found", {
+      page_path: safeText(pagePath, 512) || (location && location.pathname) || "/",
+      ...(safeText(referrer, 512) ? { referrer: referrer } : {}),
+    });
+  }
+  function trackScrollDepth(articleSlug, percent) {
+    if (!safePageId(articleSlug) || (percent !== 50 && percent !== 90)) return false;
+    return pushEvent("scroll_depth", { article_slug: articleSlug, percent_scrolled: percent });
+  }
+  function trackSelectContent(contentType, itemId) {
+    return pushEvent("select_content", {
+      content_type: safeText(contentType, 40) || "link",
+      ...(safeText(itemId, 80) ? { item_id: itemId } : {}),
+    });
+  }
+
+  window.HealthyKitchenIntegrations = Object.freeze({
+    openWhatsApp,
+    trackBlogView,
+    trackCalculatorCompletion,
+    trackCalculatorStart,
+    trackLandingPage,
+    trackPageView,
+    trackViewItem,
+    trackAddToCart,
+    trackViewCart,
+    trackRemoveFromCart,
+    trackBeginCheckout,
+    trackPromo,
+    trackShippingInfo,
+    trackPaymentInfo,
+    trackPurchase,
+    rememberPurchaseUser,
+    trackPaymentFailed,
+    trackGenerateLead,
+    trackFormError,
+    trackApiError,
+    trackNotFound,
+    trackScrollDepth,
+    trackSelectContent,
+    whatsappUrl,
+  });
+})();
+</script>
+
+<!-- T3: initial page_view from the static shell, before React/Babel mounts, so a
+     visitor who leaves before hydration still records a session. The app
+     suppresses its own first page_view (initial route) to avoid a duplicate. -->
+<script>
+  // Best effort: a failure inside the analytics facade must never surface as
+  // a page error at boot.
+  try { if (window.HealthyKitchenIntegrations) {
+    window.HealthyKitchenIntegrations.trackPageView({
+      page_path: location.pathname,
+      page_title: document.title,
+      page_id: null,
+      route_name: "initial",
+    });
+  } } catch (_trackingError) { /* tracking never blocks the page */ }
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+<script src="ds-bundle.js"></script>
+<script src="image-slot.js"></script>
+<script src="data.js?v=2"></script>
+<script src="intolerance-data.js"></script>
+
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-header.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-hero.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-hero-v2.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-quote-strip.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-meal-plans.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-why-choose-us.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-footer.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-blog-card.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-blog-list.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-blog-article.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-muscle-up-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-muscle-up-menu-faq.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-longevity-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-low-fodmap-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-autoimmune-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-gut-healing-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-anticandida-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-easy-detox-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-detox-cleanse-extras.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-ingredient-modal.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-product-detail.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-checkout.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-about-us.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-privacy-policy.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-terms-conditions.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-consultations.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-intolerance-testing.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types" src="page-payment.js"></script>
+<script type="text/babel" data-presets="react" data-plugins="transform-block-scoping,transform-optional-chaining,transform-nullish-coalescing-operator,transform-class-properties,transform-object-rest-spread,transform-flow-strip-types">
+
+const HK_LIVE = "https://healthykitchen.delivery";
+const protoHref = (file) => window.location.href.replace(/[^/]*([?#].*)?$/, file);
+window.HK_LINKS = {
+  gutMenu: HK_LIVE + "/meal-plans/gut-healing",
+  catering: protoHref("catering.html"),
+  habits: protoHref("gut-healing-habits.html"),
+};
+// Photos chosen from the HK shoot folders (31 Oct Drive shoot + Yandex archive), stored next to the prototype.
+window.HK_IMG = (f) => protoHref("img/" + f);
+
+// Shared sections for the two new pages. Each one is a parameterised copy of a section
+// already on the live site, so the new pages carry the same signature pieces as the
+// plan pages (see page-gut-healing-extras.js on healthykitchen.delivery).
+
+// PlanMenu's small label above the title is fixed to "A day on the plan" on the live
+// site; this sets a page-specific label (a developer would add it as a PlanMenu prop).
+function usePlanMenuEyebrow(text) {
+  React.useEffect(() => { const el = document.querySelector("#day span"); if (el) el.textContent = text; }, []);
+}
+
+// Green stat strip that sits under the meal carousel (GutHealingMenu on the live site).
+function HkStatBand({ stats }) {
+  const stat = (val, label, accent) => (
+    <div key={String(val)} style={{ display: "flex", flexDirection: "column", gap: "3px", alignItems: "flex-start", flex: "1 1 0", minWidth: "150px" }}>
+      <span style={{ fontFamily: "var(--font-display)", fontSize: accent ? "44px" : "38px", lineHeight: 1, color: "var(--ivory-50)" }}>{val}</span>
+      <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--green-200)" }}>{label}</span>
+    </div>
+  );
+  return (
+    <section style={{ background: "var(--bg-subtle)", borderBottom: "1px solid var(--border-subtle)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "0 32px 84px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "30px", flexWrap: "wrap", background: "var(--green-700)", color: "var(--ivory-50)", borderRadius: "var(--radius-lg)", padding: "24px 30px" }}>
+          {stats.map((s, i) => stat(s.val, s.label, i === 0))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Green band with expanding, auto-advancing panels (GutHealingPhases on the live site).
+function HkGreenPanels({ id, watermark, eyebrow, titleTop, titleBottom, intro, items, note, label }) {
+  const [active, setActive] = React.useState(0);
+  const [paused, setPaused] = React.useState(false);
+  const resumeRef = React.useRef(null);
+  const pauseTemporarily = () => { setPaused(true); clearTimeout(resumeRef.current); resumeRef.current = setTimeout(() => setPaused(false), 9000); };
+  React.useEffect(() => () => clearTimeout(resumeRef.current), []);
+  React.useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => setActive((a) => (a + 1) % items.length), 4500);
+    return () => clearInterval(t);
+  }, [paused, items.length]);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [active]);
+
+  return (
+    <section id={id} style={{ scrollMarginTop: "90px", position: "relative", overflow: "hidden", background: "var(--green-700)", color: "var(--ivory-50)" }}>
+      {/* The live mobile CSS collapses an open panel's body to 0px unless the page sets a height
+          for its aria-label. Let ours size to its content instead. */}
+      <style>{`#${id} .hk-muscleacc-panel[aria-selected="true"] > div > div { height: auto !important; }`}</style>
+      <span aria-hidden="true" className="hk-watermark" style={{ position: "absolute", right: "-20px", top: "6px", fontFamily: "var(--font-script)", fontSize: "210px", lineHeight: 1, color: "rgba(253,252,248,0.05)", pointerEvents: "none", userSelect: "none" }}>{watermark}</span>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px", position: "relative" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: "48px", flexWrap: "wrap", marginBottom: "52px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            <span style={{ fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--green-300)" }}>{eyebrow}</span>
+            <h2 style={{ margin: 0, fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, lineHeight: 1.05, fontSize: "clamp(34px, 4.4vw, 54px)" }}>
+              <span style={{ display: "block", color: "var(--ivory-50)" }}>{titleTop}</span>
+              <span style={{ display: "block", color: "var(--green-300)" }}>{titleBottom}</span>
+            </h2>
+          </div>
+          <p style={{ margin: 0, fontSize: "16px", lineHeight: 1.6, color: "var(--green-100)", maxWidth: "380px" }}>{intro}</p>
+        </div>
+
+        <div className="hk-muscleacc" role="tablist" aria-label={label} onMouseLeave={() => setPaused(false)} style={{ display: "flex", gap: "14px", alignItems: "stretch" }}>
+          {items.map((it, i) => {
+            const isActive = i === active;
+            return (
+              <button key={it.n} role="tab" aria-selected={isActive}
+                onMouseEnter={() => { setActive(i); pauseTemporarily(); }}
+                onFocus={() => { setActive(i); pauseTemporarily(); }}
+                onClick={() => { setActive(i); pauseTemporarily(); }}
+                className="hk-muscleacc-panel"
+                style={{
+                  flex: isActive ? "2.4 1 0%" : "1 1 0%", minWidth: 0,
+                  display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "18px",
+                  minHeight: "260px", padding: "22px 24px", margin: 0, textAlign: "left",
+                  background: isActive ? "rgba(253,252,248,0.09)" : "rgba(253,252,248,0.02)",
+                  border: "1px solid rgba(253,252,248,0.18)", borderRadius: "var(--radius-lg)",
+                  color: "inherit", font: "inherit", cursor: "pointer", overflow: "hidden", position: "relative",
+                  transition: "flex 0.6s var(--ease-out), background 0.45s ease, transform 0.45s ease",
+                  transform: isActive ? "translateY(-4px)" : "none",
+                }}>
+                <i aria-hidden="true" data-lucide={it.icon} style={{ position: "absolute", right: "-20px", top: "-20px", width: "150px", height: "150px", color: "var(--ivory-50)", opacity: isActive ? 0.14 : 0.08, pointerEvents: "none", transition: "opacity 0.45s ease" }}></i>
+                <span style={{ fontFamily: "var(--font-script)", fontSize: "26px", lineHeight: 1, color: isActive ? "var(--ivory-50)" : "var(--green-300)", transition: "color 0.4s ease", position: "relative" }}>{it.n}</span>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: 0, position: "relative" }}>
+                  <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-300)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxHeight: isActive ? "20px" : "0px", opacity: isActive ? 1 : 0, transition: "all 0.45s ease 0.15s" }}>{it.cap}</span>
+                  <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "24px", lineHeight: 1.2, color: "var(--ivory-50)" }}>{it.h}</h3>
+                  <div style={{ maxHeight: isActive ? "520px" : "0px", opacity: isActive ? 1 : 0, overflow: "hidden", transition: "max-height 0.55s var(--ease-out), opacity 0.4s ease 0.15s" }}>
+                    {it.p && <p style={{ margin: 0, fontSize: "15.5px", lineHeight: 1.65, color: "var(--green-100)", maxWidth: "46ch" }}>{it.p}</p>}
+                    {it.list && (
+                      <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "12px", maxWidth: "50ch" }}>
+                        {it.list.map((li) => (
+                          <li key={li.t} style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                            <span style={{ fontSize: "15.5px", fontWeight: 600, color: "var(--ivory-50)" }}>{li.t}</span>
+                            {li.d && <span style={{ fontSize: "14.5px", lineHeight: 1.55, color: "var(--green-100)" }}>{li.d}</span>}
+                            {li.why && <span style={{ fontSize: "14.5px", lineHeight: 1.55, color: "var(--green-100)" }}>{li.why}</span>}
+                            {li.how && <span style={{ fontSize: "14px", lineHeight: 1.5, color: "var(--ivory-50)", marginTop: "2px" }}><span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-300)", marginRight: "8px" }}>How</span>{li.how}</span>}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "18px", marginTop: "26px" }}>
+          <div style={{ display: "flex", gap: "6px", flex: 1 }}>
+            {items.map((it, i) => (
+              <span key={it.n} style={{ flex: 1, height: "2px", background: i === active ? "var(--ivory-50)" : "rgba(253,252,248,0.18)", transition: "background 0.4s ease" }}></span>
+            ))}
+          </div>
+          <span style={{ fontSize: "12px", letterSpacing: "var(--tracking-wider)", color: "var(--green-200)" }}>{items[active].n} / {String(items.length).padStart(2, "0")}</span>
+        </div>
+
+        {note && <p style={{ margin: "26px 0 0", fontSize: "14px", lineHeight: 1.6, color: "var(--green-100)", textAlign: "center" }}>{note}</p>}
+      </div>
+    </section>
+  );
+}
+
+// Statement heading + numbered 2x2 list (GutHealingGamble on the live site).
+function HkStatementList({ top, bottom, items, closeTop, closeBottom, bg = "var(--bg-page)", bordered }) {
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  return (
+    <section style={{ background: bg, ...(bordered ? { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" } : {}) }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px 96px" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "56px" }}>
+          <h2 className="hk-statement" style={{ margin: 0, textAlign: "center", fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 600, lineHeight: 1.08, fontSize: "clamp(28px, 4.2vw, 48px)" }}>
+            <span style={{ display: "block", color: "var(--text-strong)", whiteSpace: "nowrap" }}>{top}</span>
+            <span style={{ display: "block", color: "var(--green-700)", whiteSpace: "nowrap", fontStyle: "italic" }}>{bottom}</span>
+          </h2>
+        </div>
+        <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px" }}>
+          {items.map((it) => (
+            <div key={it.n} style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "flex-start", borderTop: "1px solid var(--border-default)", paddingTop: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "15px", color: "var(--green-700)" }}>{it.n}</span>
+                <span aria-hidden="true" style={{ width: "46px", height: "46px", borderRadius: "50%", background: "var(--green-50)", border: "1px solid var(--green-100)", display: "grid", placeItems: "center" }}>
+                  <i data-lucide={it.icon} style={{ width: 22, height: 22, color: "var(--green-700)" }}></i>
+                </span>
+              </div>
+              <h3 style={{ margin: 0, fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "21px", lineHeight: 1.25, color: "var(--text-strong)" }}>{it.h}</h3>
+              <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.6, color: "var(--text-muted)" }}>{it.p}</p>
+            </div>
+          ))}
+        </div>
+        {closeTop && (
+          <div style={{ borderTop: "1px solid var(--border-default)", marginTop: "64px", paddingTop: "56px", textAlign: "center" }}>
+            <p className="hk-statement" style={{ margin: 0, fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 600, lineHeight: 1.2, fontSize: "clamp(28px, 3.6vw, 42px)", color: "var(--text-strong)" }}>
+              {closeTop} <span style={{ display: "block", color: "var(--green-700)", fontStyle: "italic" }}>{closeBottom}</span>
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList });
+
+// Gut Smart Catering: new page for healthykitchen.delivery (route: /catering).
+// Built only from section patterns already on the live site, so it matches:
+//   Hero ............. ConsultHero (text + 4:5 photo, soft Tags)
+//   Differentiators .. GutHealingGamble (statement heading + numbered 2x2 list) -> HkStatementList
+//   Who it's for ..... ConsultFormats (photo cards with a Tag badge and check list)
+//   Your event ....... AboutStory (photo + heading + text + green info box)
+//   Menu ............. PlanMenu (carousel with tabs) + green stat strip -> HkStatBand
+//   How it works ..... GutHealingPhases (green band, expanding panels) -> HkGreenPanels
+//   Questions ........ FAQ (live component)
+// Positioning (Natalia): not ordinary catering, but gut-friendly, protocol-conscious food.
+const { Button, SectionHeading, Tag, Input } = window.HealthyKitchenDesignSystem_f4c763;
+
+const catWhatsApp = () => window.HealthyKitchenIntegrations.openWhatsApp({
+  intent: "general-enquiry",
+  ctaLocation: "catering",
+  pageId: "catering",
+});
+const catScrollTo = (id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  // The site header stays pinned on desktop but scrolls away on phones.
+  const header = document.querySelector("header");
+  const offset = header && window.innerWidth > 900 ? header.offsetHeight + 8 : 0;
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
+};
+
+/* ---------- Hero (ConsultHero pattern) ---------- */
+function CatHero() {
+  return (
+    <section style={{ background: "var(--bg-page)" }}>
+      <div className="hk-container hk-grid-2 hk-hero-grid" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "72px 32px 64px", display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: "56px", alignItems: "center" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
+          <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>
+            Gut-friendly catering · Dubai
+          </span>
+          <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "0.02em", lineHeight: 1.02, fontSize: "clamp(36px, 5.5vw, 60px)", color: "var(--text-strong)" }}>
+            Gut Smart<br />
+            <span style={{ color: "var(--green-700)" }}>Catering</span>
+          </h1>
+          <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "18px", lineHeight: 1.6, color: "var(--text-muted)", maxWidth: "48ch" }}>
+            Beautiful food for gatherings, made for people who care what they eat. Every dish is gluten-free and sugar-free, rich in fibre and fermented foods, with AIP and Low FODMAP options for guests who need them.
+          </p>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
+            <Button variant="primary" size="lg" onClick={() => catScrollTo("cat-enquire")}>Request a Quote</Button>
+            <Button variant="ghost" size="lg" iconLeft={<i data-lucide="message-circle" style={{ width: 17, height: 17 }}></i>} onClick={catWhatsApp}>WhatsApp Us</Button>
+          </div>
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <Tag tone="green" variant="soft">Fully gluten-free</Tag>
+            <Tag tone="green" variant="soft">Sugar-free</Tag>
+            <Tag tone="green" variant="soft">Gut-friendly</Tag>
+            <Tag tone="green" variant="soft">AIP & Low FODMAP</Tag>
+          </div>
+        </div>
+        <img src={HK_IMG("cat-table.jpg")} alt="A dining table set with Healthy Kitchen bowls and salads" style={{ width: "100%", height: "auto", aspectRatio: "4 / 5", objectFit: "cover", borderRadius: "18px", display: "block" }} />
+      </div>
+    </section>
+  );
+}
+
+/* ---------- What makes it different (statement + numbered list) ---------- */
+// Scope of "fully gluten-free" and "sugar-free" to be confirmed against Irina's brief.
+const HK_CAT_PILLARS = [
+  { n: "01", icon: "wheat-off", h: "Fully gluten-free and sugar-free", p: "Every dish is gluten-free, celiac-friendly and made without sugar, so no guest has to ask what's safe to eat." },
+  { n: "02", icon: "sprout", h: "Good for the gut", p: "Fermented foods, fibre-rich ingredients and a wide variety of vegetables in every menu, with microbiome bowls at the centre." },
+  { n: "03", icon: "clipboard-check", h: "Ready for special protocols", p: "AIP-friendly dishes for autoimmune protocols and Low FODMAP options, planned around your guests' intolerances." },
+  { n: "04", icon: "salad", h: "Made for mingling", p: "Microbiome bowls, salads in small jars and healthy finger food: small, easy portions in place of pastries and processed canapés." },
+];
+
+function CatPillars() {
+  return <HkStatementList top="Not ordinary catering" bottom="Food every guest can enjoy" items={HK_CAT_PILLARS}
+    closeTop="For guests with gut-health concerns or celiac disease," closeBottom="and those avoiding sugar, on AIP or Low FODMAP" bg="var(--surface-card)" bordered />;
+}
+
+/* ---------- Who it's for (ConsultFormats card pattern) ---------- */
+// Photos: HK shoots. Retreat photo is an HK wellness shot, not a real retreat (ask Irina).
+const HK_CAT_OCCASIONS = [
+  { badge: "Corporate", title: "Corporate Events", img: "cat-corporate.jpg", body: "Team lunches, board meetings, launches and wellness days. One table of varied dishes that everyone in the room can eat.", perks: ["Individual portions or a shared table", "Labelled for dietary needs"] },
+  { badge: "At home", title: "Private Gatherings", img: "cat-private.jpg", body: "Dinners at home, family celebrations and weekend brunches, beautifully arranged and ready to serve.", perks: ["Sharing platters and bowls", "Menus planned around your guests"] },
+  { badge: "Wellness", title: "Wellness Retreats", img: "cat-retreat.jpg", body: "Yoga days, retreat weekends and studio events, with food as thoughtful as the programme itself.", perks: ["Light, gut-friendly menus", "Cold-pressed drinks available"] },
+  { badge: "Celebrations", title: "Special Occasions", img: "cat-occasion.jpg", body: "Birthdays, baby showers and milestones, with sugar-free sweet treats that every guest can share.", perks: ["Healthy finger food", "Sugar-free desserts"] },
+];
+
+function CatOccasions() {
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  return (
+    <section style={{ background: "var(--bg-page)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "48px" }}>
+          <SectionHeading eyebrow="Who it's for" title="Made for every occasion" />
+        </div>
+        <div className="hk-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px", alignItems: "stretch" }}>
+          {HK_CAT_OCCASIONS.map((f) => (
+            <div key={f.title} style={{ background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", display: "flex", flexDirection: "column", transition: "transform var(--dur-slow) var(--ease-out), box-shadow var(--dur-slow) var(--ease-out)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ position: "relative" }}>
+                <img src={HK_IMG(f.img)} alt={f.title} style={{ width: "100%", aspectRatio: "4 / 5", objectFit: "cover", display: "block" }} />
+                <span style={{ position: "absolute", top: "16px", left: "16px" }}><Tag tone="green" variant="solid">{f.badge}</Tag></span>
+              </div>
+              <div style={{ padding: "24px 22px 26px", display: "flex", flexDirection: "column", gap: "14px", flex: 1 }}>
+                <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "22px", color: "var(--text-strong)" }}>{f.title}</h3>
+                <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.62, color: "var(--text-muted)" }}>{f.body}</p>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {f.perks.map((p) => (
+                    <li key={p} style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "var(--font-body)", fontSize: "14px", color: "var(--text-body)" }}>
+                      <i data-lucide="check" style={{ width: 16, height: 16, color: "var(--green-700)", flexShrink: 0 }}></i>{p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Your event, your menu (AboutStory pattern + presentation cards) ---------- */
+// Card style = the site's PlanMenu meal cards. Bowl photo is a 31 Oct greens bowl,
+// jar photo is the chia pudding jar: swap for Irina's catering shots (microbiome bowl, salad jars).
+const HK_CAT_SERVED = [
+  { kind: "Bowls", title: "Microbiome bowls", img: "serve-bowl.jpg", ratio: "4 / 5", desc: "Greens, fermented vegetables and fibre-rich grains, in a bowl for each guest." },
+  { kind: "Jars", title: "Salads and puddings in small jars", img: "serve-jars.jpg", ratio: "4 / 5", desc: "Easy to pick up, easy to carry, and no plates needed." },
+  { kind: "Finger food", title: "Healthy bites", img: "serve-finger.jpg", ratio: "4 / 5", desc: "Sugar-free sweet bites and gluten-free savoury pieces, in place of pastries." },
+];
+
+function CatServe() {
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  const swaps = [
+    ["croissants and canapés", "gluten-free mini zucchini pancakes and mini waffles"],
+    ["cakes and sweets", "cacao nut balls, coconut mini balls and keto brownie bites"],
+    ["heavy buffet trays", "microbiome bowls and salads in small jars"],
+  ];
+  return (
+    <section style={{ background: "var(--surface-card)", borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
+        <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px", alignItems: "center" }}>
+          <img src={HK_IMG("cat-serving.jpg")} alt="Guests serving themselves from a table of Healthy Kitchen dishes" style={{ width: "100%", height: "auto", aspectRatio: "4 / 5", objectFit: "cover", borderRadius: "18px", display: "block" }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <SectionHeading eyebrow="Your event, your menu" title="Wellness food, made for sharing" align="left" />
+            <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "17px", lineHeight: 1.65, color: "var(--text-body)" }}>
+              Most event food is pastry, white bread and sugar. Ours is the opposite: real, nourishing food in small, easy portions that guests can enjoy while they mingle. You choose the dishes, individual portions or a buffet, and we tailor the menu around every guest's dietary needs.
+            </p>
+            <div style={{ background: "var(--green-50, rgba(46,89,60,0.06))", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", padding: "20px 22px", display: "flex", gap: "16px", alignItems: "flex-start" }}>
+              <i data-lucide="leaf" style={{ width: 22, height: 22, color: "var(--green-700)", flexShrink: 0, marginTop: "2px" }}></i>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-700)" }}>The healthy swap</span>
+                {swaps.map(([a, b]) => (
+                  <span key={a} style={{ fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.55, color: "var(--text-body)" }}>
+                    Instead of {a}: <strong style={{ fontWeight: 600, color: "var(--text-strong)" }}>{b}</strong>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="hk-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginTop: "56px" }}>
+          {HK_CAT_SERVED.map((m) => (
+            <div key={m.title} style={{ display: "flex", flexDirection: "column", background: "var(--bg-page)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", boxShadow: "var(--shadow-xs)" }}>
+              <div style={{ position: "relative", aspectRatio: m.ratio, background: "var(--ivory-100)" }}>
+                <img src={HK_IMG(m.img)} alt={m.title} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "22px" }}>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-600)" }}>{m.kind}</span>
+                <h3 style={{ margin: 0, fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, fontSize: "20px", lineHeight: 1.15, color: "var(--text-strong)" }}>{m.title}</h3>
+                <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "13.5px", lineHeight: 1.5, color: "var(--text-muted)" }}>{m.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Menu (live PlanMenu component, with tabs) ---------- */
+// Dish names exactly as in the brief. Publish only verified dishes. Photos only where an
+// HK photo clearly shows that dish; the rest show PlanMenu's own "photo" placeholder.
+const HK_CAT_MENU = [
+  { label: "Finger Foods", ratio: "4 / 5", meals: [
+    { meal: "Finger food", title: "GF Mini Zucchini Pancakes with Salmon", img: HK_IMG("dish-zucchini-pancakes.jpg"), desc: "Small gluten-free pancakes, easy to eat while you mingle." },
+    { meal: "Finger food", title: "GF Mini Waffles with Salmon & Guacamole", desc: "Gluten-free mini waffles, served in small portions." },
+    { meal: "Finger food", title: "Chia Pudding with Mango", desc: "Served in small individual jars." },
+    { meal: "Finger food", title: "Cacao Nut Balls", img: HK_IMG("dish-cacao-balls.jpg"), desc: "A sugar-free sweet bite." },
+    { meal: "Finger food", title: "Coconut Mini Balls", img: HK_IMG("dish-coconut-balls.jpg"), desc: "A sugar-free sweet bite." },
+    { meal: "Finger food", title: "Keto Brownie Bites", img: HK_IMG("dish-brownie-bites.jpg"), desc: "Rich, sugar-free brownie in small squares." },
+  ] },
+  { label: "Mains", meals: [
+    { meal: "Main", title: "Konjac Pasta with Pesto & Chicken", img: "assets/meals/aip-dinner.jpg", desc: "Individual portions or to share." },
+    { meal: "Main", title: "Turkey Stroganoff with Mushrooms & Quinoa", desc: "Individual portions or to share." },
+    { meal: "Main", title: "Wild Salmon with Broccoli", img: "assets/meals/longevity-dinner.jpg", desc: "Individual portions or to share." },
+    { meal: "Main", title: "Kale Beetroot Quinoa Salad with Organic Chicken", desc: "Also served in small jars." },
+    { meal: "Main", title: "Kale Pumpkin Quinoa Salad with Organic Chicken", img: HK_IMG("dish-kale-pumpkin-salad.jpg"), desc: "Also served in small jars." },
+    { meal: "Main", title: "Microbiome Bowl", desc: "Fermented foods, fibre and many kinds of vegetables." },
+    { meal: "Main", title: "Blue Zones Bowl", desc: "Individual bowls for each guest." },
+    { meal: "Main", title: "Healthy Caesar Salad with Organic Chicken & Cashew Mayo", desc: "Individual portions or to share." },
+    { meal: "Main", title: "Longevity Salad", desc: "Individual portions or to share." },
+  ] },
+  { label: "Drinks", meals: [
+    { meal: "Drinks", title: "Cold-pressed juices", img: "assets/plans/detox-cleanse-cover.jpg", desc: "Our bottled drinks can be added to any order. Ask for the current selection with your quote." },
+  ] },
+];
+
+// Same markup and styles as the live PlanMenu carousel, plus a photo shape per tab:
+// finger-food photos are portrait close-ups, so that tab uses 4:5 cards instead of
+// cropping them to 4:3 (which made them look zoomed in).
+function CatMenuCarousel({ menus, title, sub }) {
+  const [idx, setIdx] = React.useState(0);
+  const scrollRef = React.useRef(null);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); if (scrollRef.current) scrollRef.current.scrollLeft = 0; }, [idx]);
+  const menu = menus[idx];
+  const scrollBy = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 340, behavior: "smooth" }); };
+  const arrowStyle = (side) => ({
+    position: "absolute", top: "50%", transform: "translateY(-50%)", [side]: "-18px",
+    width: "40px", height: "40px", borderRadius: "50%", border: "1px solid var(--border-subtle)",
+    background: "rgba(253,252,248,0.7)", color: "var(--text-muted)", cursor: "pointer",
+    display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, opacity: 0.55, boxShadow: "var(--shadow-xs)",
+  });
+  return (
+    <section id="day" style={{ background: "var(--bg-subtle)", borderTop: "1px solid var(--border-subtle)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start", marginBottom: "36px" }}>
+          <span style={{ fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>Menu preview</span>
+          <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", lineHeight: 1.05, fontSize: "clamp(28px, 5vw, 40px)", color: "var(--text-strong)" }}>{title}</h2>
+          <p style={{ margin: 0, fontSize: "17px", lineHeight: 1.5, color: "var(--text-muted)", maxWidth: "56ch" }}>{sub}</p>
+        </div>
+        <div style={{ display: "inline-flex", background: "var(--white)", border: "1px solid var(--border-default)", borderRadius: "var(--radius-pill)", padding: "4px", gap: "4px", marginBottom: "28px" }}>
+          {menus.map((m, i) => (
+            <button key={i} onClick={() => setIdx(i)} style={{
+              cursor: "pointer", border: 0, borderRadius: "var(--radius-pill)", padding: "9px 22px",
+              fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)",
+              background: i === idx ? "var(--green-700)" : "transparent", color: i === idx ? "var(--ivory-50)" : "var(--text-muted)",
+              transition: "all var(--dur-base) var(--ease-out)",
+            }}>{m.label}</button>
+          ))}
+        </div>
+        <div style={{ position: "relative", margin: "0 8px" }}>
+          <button type="button" onClick={() => scrollBy(-1)} aria-label="Scroll left" style={arrowStyle("left")}><i data-lucide="chevron-left" style={{ width: 18, height: 18 }}></i></button>
+          <button type="button" onClick={() => scrollBy(1)} aria-label="Scroll right" style={arrowStyle("right")}><i data-lucide="chevron-right" style={{ width: 18, height: 18 }}></i></button>
+          <div ref={scrollRef} style={{ display: "flex", gap: "20px", overflowX: "auto", scrollSnapType: "x mandatory", padding: "2px 2px 6px", scrollbarWidth: "none" }}>
+            {menu.meals.map((m, i) => (
+              <div key={menu.label + i} style={{ flex: "0 0 280px", scrollSnapAlign: "start", display: "flex", flexDirection: "column", background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", boxShadow: "var(--shadow-xs)" }}>
+                <div style={{ position: "relative", aspectRatio: menu.ratio || "4 / 3", background: m.img ? "var(--ivory-100)" : "repeating-linear-gradient(45deg, var(--ivory-200), var(--ivory-200) 9px, var(--ivory-100) 9px, var(--ivory-100) 18px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {m.img
+                    ? <img src={m.img} alt={m.title} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+                    : <span style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-400)", background: "var(--ivory-50)", padding: "4px 8px", borderRadius: "var(--radius-sm)" }}>{m.meal} photo</span>}
+                </div>
+                <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", gap: "12px", padding: "22px" }}>
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-600)" }}>{m.meal}</span>
+                  <h3 style={{ margin: 0, minHeight: "calc(20px * 1.15 * 2)", fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, fontSize: "20px", lineHeight: 1.15, color: "var(--text-strong)" }}>{m.title}</h3>
+                  <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "13.5px", lineHeight: 1.5, color: "var(--text-muted)" }}>{m.desc || ""}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CatMenu() {
+  return (
+    <>
+      <CatMenuCarousel menus={HK_CAT_MENU} title="A taste of the menu" sub="Finger food, mains and drinks, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
+      <HkStatBand stats={[
+        { val: "100%", label: "Gluten-free" },
+        { val: "0g", label: "Added sugar" },
+        { val: "AIP", label: "& Low FODMAP options" },
+        { val: "Daily", label: "Made fresh in Dubai" },
+      ]} />
+    </>
+  );
+}
+
+/* ---------- How it works (green band, expanding panels) ---------- */
+const HK_CAT_STEPS = [
+  { n: "01", icon: "send", cap: "Step one", h: "Send an enquiry", p: "Tell us the date, the number of guests, the occasion and any dietary needs, using the form below or on WhatsApp." },
+  { n: "02", icon: "clipboard-list", cap: "Step two", h: "Get your quote", p: "Our team suggests a menu and serving style for your event and sends a tailored quote for you to review." },
+  { n: "03", icon: "truck", cap: "Step three", h: "We deliver", p: "Everything is made fresh by our chefs on the day and delivered across Dubai, ready to serve." },
+];
+
+function CatSteps() {
+  return (
+    <HkGreenPanels id="cat-steps" watermark="gather" label="How it works" eyebrow="How it works" titleTop="Three steps" titleBottom="to the table"
+      intro="From the first message to the last plate, our team takes care of the details." items={HK_CAT_STEPS} />
+  );
+}
+
+/* ---------- Questions & Answers (live FAQ component) ---------- */
+const HK_CAT_FAQ = [
+  { q: "Is every dish gluten-free and sugar-free?", a: "Yes. Our catering menu is gluten-free and made without sugar, so it suits guests with celiac disease and those avoiding sugar." },
+  { q: "Can you cater for AIP or Low FODMAP guests?", a: "Yes. Tell us about your guests' needs when you enquire and we'll plan AIP-friendly and Low FODMAP options alongside the main menu." },
+  { q: "How much does catering cost?", a: "Every event is quoted individually, based on the menu, number of guests and serving style. Send an enquiry and we'll come back with a tailored quote." },
+  { q: "Can food be served as individual portions?", a: "Yes. Choose individual portions, a shared buffet, or bowls and small jars, whichever suits your event." },
+  { q: "Where do you deliver?", a: "We deliver across Dubai. Everything is made fresh on the day of your event." },
+];
+
+function CatFAQ() {
+  return <FAQ items={HK_CAT_FAQ} eyebrow="Catering FAQs" />;
+}
+
+/* ---------- Testimonials ---------- */
+// Brief: real reviews only, hide the section if none exist. Add entries to show it
+// with the same card style as the site's Reviews section.
+const HK_CAT_REVIEWS = [];
+function CatReviews() { return null; }
+
+/* ---------- Enquiry form + contact ---------- */
+function CatChoice({ options, value, onChange, label, multi }) {
+  const isOn = (o) => (multi ? value.includes(o) : value === o);
+  const pick = (o) => onChange(multi ? (value.includes(o) ? value.filter((x) => x !== o) : value.concat(o)) : o);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
+      <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--text-muted)" }}>{label}</span>
+      <div role="group" aria-label={label} style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+        {options.map((o) => {
+          const on = isOn(o);
+          return (
+            <button type="button" key={o} aria-pressed={on} onClick={() => pick(o)} style={{
+              cursor: "pointer", border: 0, borderRadius: "var(--radius-pill)", padding: "9px 18px",
+              fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)",
+              background: on ? "var(--green-700)" : "var(--white)", color: on ? "var(--ivory-50)" : "var(--text-muted)",
+              boxShadow: on ? "none" : "inset 0 0 0 1px var(--border-default)", transition: "all var(--dur-base) var(--ease-out)",
+            }}>{o}</button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function CatEnquiry() {
+  const [occasion, setOccasion] = React.useState("Corporate event");
+  const [style, setStyle] = React.useState("Individual portions");
+  const [diets, setDiets] = React.useState([]);
+  const [sent, setSent] = React.useState(false);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [sent]);
+  const submit = (e) => {
+    e.preventDefault();
+    if (!e.currentTarget.checkValidity()) { e.currentTarget.reportValidity(); return; }
+    setSent(true); // prototype: nothing is sent
+  };
+  return (
+    <section id="cat-enquire" style={{ background: "var(--surface-card)", borderTop: "1px solid var(--border-subtle)" }}>
+      <div className="hk-container hk-grid-2" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px", display: "grid", gridTemplateColumns: "0.85fr 1.15fr", gap: "64px", alignItems: "start" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <SectionHeading eyebrow="Request a quote" title="Let's plan your event" align="left" />
+          <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "17px", lineHeight: 1.65, color: "var(--text-body)", maxWidth: "44ch" }}>
+            Every event is quoted individually, based on the menu, guest numbers and serving style. Our team usually replies within one working day.
+          </p>
+          <div style={{ background: "var(--green-50, rgba(46,89,60,0.06))", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", padding: "20px 22px", display: "flex", gap: "16px", alignItems: "flex-start" }}>
+            <i data-lucide="message-circle" style={{ width: 22, height: 22, color: "var(--green-700)", flexShrink: 0, marginTop: "2px" }}></i>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <span style={{ fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.55, color: "var(--text-body)" }}>Prefer to talk? Message our team on WhatsApp at +971 58 512 97 92.</span>
+              <button type="button" onClick={catWhatsApp} style={{ alignSelf: "flex-start", background: "none", border: 0, padding: 0, cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "13px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-700)", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                WhatsApp Us <i data-lucide="arrow-up-right" style={{ width: 14, height: 14 }}></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ background: "var(--bg-page)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", padding: "36px 34px" }}>
+          {sent ? (
+            <div key="sent" role="status" style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "16px", padding: "48px 12px" }}>
+              <span aria-hidden="true" style={{ width: "58px", height: "58px", borderRadius: "50%", background: "var(--green-700)", display: "grid", placeItems: "center" }}>
+                <i data-lucide="check" style={{ width: 26, height: 26, color: "var(--ivory-50)" }}></i>
+              </span>
+              <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "24px", color: "var(--text-strong)" }}>Thank you, we have your enquiry</h3>
+              <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.6, color: "var(--text-muted)", maxWidth: "40ch" }}>Our catering team will be in touch within one working day with a tailored menu and quote.</p>
+              <Button variant="ghost" size="md" onClick={() => setSent(false)}>Send another enquiry</Button>
+            </div>
+          ) : (
+            <form key="form" onSubmit={submit} noValidate style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
+              <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px" }}>
+                <Input label="Full name" id="cat-name" name="name" autoComplete="name" required />
+                <Input label="Company (optional)" id="cat-company" name="company" autoComplete="organization" />
+                <Input label="Email" id="cat-email" name="email" type="email" autoComplete="email" required />
+                <Input label="Phone / WhatsApp" id="cat-phone" name="phone" type="tel" autoComplete="tel" placeholder="+971" />
+              </div>
+              <CatChoice label="Occasion" value={occasion} onChange={setOccasion} options={["Corporate event", "Private gathering", "Wellness retreat", "Special occasion"]} />
+              <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px" }}>
+                <Input label="Event date" id="cat-date" name="date" type="date" />
+                <Input label="Number of guests" id="cat-guests" name="guests" as="select" defaultValue="20–50">
+                  <option>Up to 20</option><option>20–50</option><option>50–100</option><option>100+</option>
+                </Input>
+              </div>
+              <CatChoice label="Serving style" value={style} onChange={setStyle} options={["Individual portions", "Buffet", "Bowls and jars", "Not sure yet"]} />
+              <CatChoice multi label="Your guests' dietary needs" value={diets} onChange={setDiets} options={["Gut-friendly", "Gluten-free / celiac", "Sugar-free", "AIP", "Low FODMAP", "Other allergies"]} />
+              <Input label="Anything else" id="cat-notes" name="notes" as="textarea" placeholder="Allergies, intolerances, venue, timings…" />
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap", paddingTop: "18px", borderTop: "1px solid var(--border-subtle)" }}>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", lineHeight: 1.5, color: "var(--text-faint)", maxWidth: "36ch" }}>We'll only use your details to reply to this enquiry.</span>
+                <Button variant="primary" size="lg" type="submit">Request a Quote</Button>
+              </div>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- Page ---------- */
+function Catering() {
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  return (
+    <>
+      <CatHero />
+      <CatPillars />
+      <CatOccasions />
+      <CatServe />
+      <CatMenu />
+      <CatSteps />
+      <CatReviews />
+      <CatFAQ />
+      <CatEnquiry />
+    </>
+  );
+}
+
+window.Catering = Catering;
+
+
+function ProtoNotes({ notes }) {
+  const [open, setOpen] = React.useState(false);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [open]);
+  return (
+    <div style={{ position: "fixed", left: "20px", bottom: "20px", zIndex: 60, display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "10px", maxWidth: "calc(100vw - 40px)" }}>
+      {open && (
+        <div role="dialog" aria-label="Review notes" style={{ width: "380px", maxWidth: "100%", background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", padding: "22px 22px 18px" }}>
+          <span style={{ fontFamily: "var(--font-body)", fontSize: "11px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>Prototype · not published</span>
+          <h3 style={{ margin: "6px 0 14px", fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "22px", color: "var(--text-strong)" }}>Open items for review</h3>
+          <ol style={{ margin: 0, paddingLeft: "18px", display: "flex", flexDirection: "column", gap: "9px" }}>
+            {notes.map((n, i) => <li key={i} style={{ fontFamily: "var(--font-body)", fontSize: "14px", lineHeight: 1.5, color: "var(--text-body)" }}>{n}</li>)}
+          </ol>
+          <div style={{ display: "flex", gap: "16px", marginTop: "16px", paddingTop: "14px", borderTop: "1px solid var(--border-subtle)", fontFamily: "var(--font-body)", fontSize: "13px" }}>
+            <a href={window.HK_LINKS.habits} style={{ color: "var(--green-700)" }}>Gut Healing Habits</a>
+            <a href={window.HK_LINKS.catering} style={{ color: "var(--green-700)" }}>Catering</a>
+          </div>
+        </div>
+      )}
+      <button onClick={() => setOpen(!open)} aria-expanded={open} style={{ display: "inline-flex", alignItems: "center", gap: "8px", cursor: "pointer", font: "inherit", fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-700)", background: "var(--surface-card)", border: "1px solid var(--border-default)", borderRadius: "var(--radius-pill)", padding: "10px 16px", boxShadow: "var(--shadow-md)" }}>
+        <i data-lucide={open ? "x" : "clipboard-list"} style={{ width: 16, height: 16 }}></i>
+        {open ? "Close notes" : "Review notes · " + notes.length}
+      </button>
+    </div>
+  );
+}
+
+const HK_NAV_MAP = { "Meal Plans": "/#meal-plans", "FAQs": "/#faq", "Blog": "/blog", "About Us": "/about", "Consultations": "/consultations", "Intolerance Testing": "/intolerance-testing", "Privacy Policy": "/privacy-policy", "Terms & Conditions": "/terms-and-conditions", "Contact Us": "/about" };
+function ProtoApp() {
+  const go = (path) => { window.location.href = HK_LIVE + path; };
+  const handleNav = (label) => go(HK_NAV_MAP[label] || "/");
+  return (
+    <>
+      <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
+      <main><Catering /></main>
+      <Footer onNav={handleNav} onHome={() => go("/")} />
+      <ProtoNotes notes={["“Fully gluten-free” and “fully sugar-free” are Natalia's words. Irina's brief says not to claim this unless every dish is verified, so Irina must confirm before publishing.","Anti-Candida is left out of this page on purpose (Natalia).","New photos: corporate table and hands serving are from the 31 Oct shoot. Private gathering and special occasion are from earlier HK shoots (festive table, tart stand). Confirm with Natalia or Irina, or swap for her book and event photos.","Wellness retreats uses an HK yoga/meditation shot, not a real retreat. Ask Irina for photos from a past retreat.","Finger foods now show small-portion HK photos (mini pancakes, nut balls, coconut balls, brownie bites). Irina to confirm each photo is the catering version of that dish.","Still missing: real salads-in-jars and Microbiome Bowl catering shots (the “served” row uses a greens bowl and the chia jar for now), mini waffles, chia pudding with mango and some mains. Ask Irina.","Finger-food photos are shown uncropped in portrait cards so they don't look zoomed in. The brownie photo is a close-up; a wider catering shot would be better.","Drinks list to confirm with Irina. Page name “Gut Smart Catering” still to confirm. Stat strip (100% gluten-free, 0g added sugar) and FAQ answers need Irina's confirmation.","Testimonials are hidden (no real catering reviews yet). The enquiry form sends nothing yet."]} />
+    </>
+  );
+}
+
+function HKMounted({ children }) {
+  React.useLayoutEffect(() => {
+    document.documentElement.classList.add("js");
+    document.documentElement.classList.remove("hk-booting");
+  }, []);
+  return children;
+}
+const mount = () => {
+  if (!window.Header || !window.Footer || !window.Catering) { setTimeout(mount, 40); return; }
+  ReactDOM.createRoot(document.getElementById("root")).render(<HKMounted><ProtoApp /></HKMounted>);
+  setTimeout(() => { if (window.lucide) window.lucide.createIcons(); }, 60);
+};
+mount();
+
+</script>
+<!-- Prototype for review: not published -->
+</body>
+</html>
