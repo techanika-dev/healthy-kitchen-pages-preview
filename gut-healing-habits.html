@@ -905,7 +905,80 @@ function HkFormatCards({ eyebrow, title, cards, footLabel, footCta, onFoot }) {
   );
 }
 
-Object.assign(window, { usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList, HkPlanHero, HkFormatCards });
+// Meal carousel: same markup and sizes as the live PlanMenu (300px cards, 4:3 photo, macro row),
+// with a page-specific eyebrow. Missing nutrition shows "–" instead of a made-up number.
+// inset: photo sits inside the card with a margin, so food has breathing space (Natalia).
+function HkMenu({ menus, eyebrow, title, sub, inset }) {
+  const [idx, setIdx] = React.useState(0);
+  const scrollRef = React.useRef(null);
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); if (scrollRef.current) scrollRef.current.scrollLeft = 0; }, [idx]);
+  const menu = menus[idx];
+  const num = (v, unit) => (v === undefined || v === null ? "–" : v + (unit || ""));
+  const stat = (val, label, accent) => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "1px", flex: "1 1 0" }}>
+      <span style={{ fontFamily: "var(--font-display)", fontSize: accent ? "26px" : "20px", color: accent ? "var(--green-700)" : "var(--text-strong)", lineHeight: 1 }}>{val}</span>
+      <span style={{ fontFamily: "var(--font-body)", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-faint)" }}>{label}</span>
+    </div>
+  );
+  const scrollBy = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 340, behavior: "smooth" }); };
+  const arrowStyle = (side) => ({
+    position: "absolute", top: "50%", transform: "translateY(-50%)", [side]: "-18px",
+    width: "40px", height: "40px", borderRadius: "50%", border: "1px solid var(--border-subtle)",
+    background: "rgba(253,252,248,0.7)", color: "var(--text-muted)", cursor: "pointer",
+    display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, opacity: 0.55, boxShadow: "var(--shadow-xs)",
+  });
+  const placeholder = "repeating-linear-gradient(45deg, var(--ivory-200), var(--ivory-200) 9px, var(--ivory-100) 9px, var(--ivory-100) 18px)";
+  return (
+    <section id="day" style={{ background: "var(--bg-subtle)", borderTop: "1px solid var(--border-subtle)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start", marginBottom: "36px" }}>
+          <span style={{ fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>{eyebrow}</span>
+          <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", lineHeight: 1.05, fontSize: "clamp(28px, 5vw, 40px)", color: "var(--text-strong)" }}>{title}</h2>
+          <p style={{ margin: 0, fontSize: "17px", lineHeight: 1.5, color: "var(--text-muted)", maxWidth: "56ch" }}>{sub}</p>
+        </div>
+        {menus.length > 1 && (
+          <div style={{ display: "inline-flex", background: "var(--white)", border: "1px solid var(--border-default)", borderRadius: "var(--radius-pill)", padding: "4px", gap: "4px", marginBottom: "28px" }}>
+            {menus.map((m, i) => (
+              <button key={i} onClick={() => setIdx(i)} style={{
+                cursor: "pointer", border: 0, borderRadius: "var(--radius-pill)", padding: "9px 22px",
+                fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)",
+                background: i === idx ? "var(--green-700)" : "transparent", color: i === idx ? "var(--ivory-50)" : "var(--text-muted)",
+                transition: "all var(--dur-base) var(--ease-out)",
+              }}>{m.label}</button>
+            ))}
+          </div>
+        )}
+        <div style={{ position: "relative", margin: "0 8px" }}>
+          <button type="button" onClick={() => scrollBy(-1)} aria-label="Scroll left" style={arrowStyle("left")}><i data-lucide="chevron-left" style={{ width: 18, height: 18 }}></i></button>
+          <button type="button" onClick={() => scrollBy(1)} aria-label="Scroll right" style={arrowStyle("right")}><i data-lucide="chevron-right" style={{ width: 18, height: 18 }}></i></button>
+          <div ref={scrollRef} style={{ display: "flex", gap: "20px", overflowX: "auto", scrollSnapType: "x mandatory", padding: "2px 2px 6px", scrollbarWidth: "none" }}>
+            {menu.meals.map((m, i) => (
+              <div key={menu.label + i} style={{ flex: "0 0 300px", scrollSnapAlign: "start", display: "flex", flexDirection: "column", background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", boxShadow: "var(--shadow-xs)" }}>
+                <div style={{ position: "relative", aspectRatio: "4 / 3", padding: inset ? "14px 14px 0" : 0, display: "flex" }}>
+                  <div style={{ position: "relative", flex: 1, borderRadius: inset ? "12px" : 0, overflow: "hidden", background: m.img ? "var(--ivory-100)" : placeholder, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {m.img
+                      ? <img src={m.img} alt={m.title} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: m.pos || "50% 50%" }} />
+                      : <span style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-400)", background: "var(--ivory-50)", padding: "4px 8px", borderRadius: "var(--radius-sm)" }}>{m.meal} photo</span>}
+                  </div>
+                </div>
+                <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", gap: "12px", padding: "22px" }}>
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-600)" }}>{m.meal}</span>
+                  <h3 style={{ margin: 0, minHeight: "calc(20px * 1.15 * 2)", fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, fontSize: "20px", lineHeight: 1.15, color: "var(--text-strong)" }}>{m.title}</h3>
+                  <p style={{ margin: 0, minHeight: "calc(13.5px * 1.5 * 3)", fontFamily: "var(--font-body)", fontSize: "13.5px", lineHeight: 1.5, color: "var(--text-muted)" }}>{m.desc || ""}</p>
+                  <div style={{ display: "flex", gap: "12px", marginTop: "auto", borderTop: "1px solid var(--border-subtle)", paddingTop: "14px" }}>
+                    {stat(num(m.kcal), "kcal", true)}{stat(num(m.p, "g"), "protein")}{stat(num(m.c, "g"), "carbs")}{stat(num(m.f, "g"), "fat")}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { HkMenu, usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList, HkPlanHero, HkFormatCards });
 
 // Daily Gut Rituals (brief: "Gut Healing Habits"): new page for healthykitchen.delivery.
 // Same flow and pieces as the live Gut Healing Protocol page (page-gut-healing-extras.js):
@@ -966,26 +1039,62 @@ const HK_GHH_RITUALS = [
 ];
 
 function GhhRituals() {
-  return <HkStatementList id="ghh-rituals" top="Seven daily rituals" bottom="for a happier gut" items={HK_GHH_RITUALS}
-    closeTop="Small changes, made every day," closeBottom="are the ones your gut feels most" />;
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  return (
+    <section id="ghh-rituals" style={{ scrollMarginTop: "90px", background: "var(--bg-page)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "72px 32px 80px" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", textAlign: "center", marginBottom: "44px" }}>
+          <h2 className="hk-statement" style={{ margin: 0, fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 600, lineHeight: 1.08, fontSize: "clamp(28px, 3.4vw, 40px)" }}>
+            <span style={{ color: "var(--text-strong)" }}>Seven daily rituals </span>
+            <span style={{ color: "var(--green-700)", fontStyle: "italic" }}>for a happier gut</span>
+          </h2>
+          <p style={{ margin: 0, fontSize: "16px", lineHeight: 1.6, color: "var(--text-muted)", maxWidth: "62ch" }}>
+            How your gut feels is shaped less by one big change than by what you repeat every day. These small rituals take minutes, need no special shopping, and add up over time.
+          </p>
+        </div>
+        <div className="hk-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "28px 24px" }}>
+          {HK_GHH_RITUALS.map((it) => (
+            <div key={it.n} style={{ display: "flex", flexDirection: "column", gap: "10px", borderTop: "1px solid var(--border-default)", paddingTop: "16px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "14px", color: "var(--green-700)" }}>{it.n}<span style={{ fontWeight: 500, fontSize: "11px", textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--text-faint)", marginLeft: "10px" }}>{it.cap}</span></span>
+                <span aria-hidden="true" style={{ width: "36px", height: "36px", borderRadius: "50%", background: "var(--green-50)", border: "1px solid var(--green-100)", display: "grid", placeItems: "center" }}>
+                  <i data-lucide={it.icon} style={{ width: 18, height: 18, color: "var(--green-700)" }}></i>
+                </span>
+              </div>
+              <h3 style={{ margin: 0, fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "18px", lineHeight: 1.25, color: "var(--text-strong)" }}>{it.h}</h3>
+              <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.55, color: "var(--text-muted)" }}>{it.p}</p>
+              <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.5, color: "var(--text-body)" }}><span style={{ fontSize: "10.5px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.12em", background: "var(--green-100)", color: "var(--green-800)", borderRadius: "var(--radius-pill)", padding: "3px 8px", marginRight: "8px" }}>How</span>{it.how}</p>
+            </div>
+          ))}
+          <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "14px", background: "var(--green-700)", color: "var(--ivory-50)", borderRadius: "var(--radius-lg)", padding: "22px" }}>
+            <span style={{ fontFamily: "var(--font-script)", fontSize: "30px", lineHeight: 1, color: "var(--green-200)" }}>Start with one</span>
+            <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.55, color: "var(--green-100)" }}>Pick the easiest ritual and keep it for two weeks. Let us take care of the food in the meantime.</p>
+            <button onClick={ghhGoMenu} style={{ alignSelf: "flex-start", background: "none", border: 0, padding: 0, cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "13px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--ivory-50)", display: "inline-flex", alignItems: "center", gap: "6px" }}>
+              Gut Healing Protocol <i data-lucide="arrow-right" style={{ width: 14, height: 14 }}></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
 
 /* ---------- A gut-friendly day, plated (PlanMenu + stat strip) ---------- */
-// 31 Oct shoot photos. Dish names and descriptions to confirm with the kitchen.
+// The live Gut Healing Protocol sample day (same dishes, photos and nutrition as that page),
+// so every card shows real kcal and macros.
 const HK_GHH_DAY = [
   { label: "A gut-friendly day", meals: [
-    { meal: "Breakfast", img: HK_IMG("day-breakfast.jpg"), title: "Vegetable omelette with feta", desc: "A gentle, protein-rich start with soft-cooked vegetables and fresh herbs." },
-    { meal: "Lunch", img: HK_IMG("day-lunch.jpg"), title: "Greens bowl with pumpkin and quinoa", desc: "Leafy greens, roasted pumpkin and whole grains for colour and fibre." },
-    { meal: "Snack", img: HK_IMG("day-snack.jpg"), title: "Chia pudding with berries and granola", desc: "A light afternoon snack with seeds and fresh berries." },
-    { meal: "Dinner", img: HK_IMG("day-dinner.jpg"), title: "Slow-cooked lamb with vegetables", desc: "Slow-cooked and easy to digest, for a calm evening." },
+    { meal: "Breakfast", img: "assets/meals/gut-breakfast.jpg", title: "Zucchini pancakes with salmon & coconut yogurt", desc: "Rich in omega-3 for anti-inflammatory support. Gentle on digestion, with natural probiotics.", kcal: 364, p: 22, c: 24, f: 20 },
+    { meal: "Lunch", img: "assets/meals/gut-lunch.jpg", title: "Pharmacy bowl", desc: "Fermented foods for gut flora, plus fiber from greens, seeds and avocado to boost nutrient absorption.", kcal: 533, p: 41, c: 36, f: 25 },
+    { meal: "Dinner", img: "assets/meals/gut-dinner.jpg", title: "Konjac pasta bolognese", desc: "Low-carb and light on digestion, with prebiotics for microbiome health. An easy, soothing evening meal.", kcal: 434, p: 44, c: 15, f: 22 },
+    { meal: "Snack", img: "assets/meals/gut-snack.jpg", title: "Hazelnut cake", desc: "No sugar, no flour, only whole foods. Rich in magnesium for a calming effect and stable blood sugar.", kcal: 278, p: 8, c: 21, f: 18 },
   ] },
 ];
 
 function GhhDay() {
-  usePlanMenuEyebrow("Rituals, made easier");
   return (
     <>
-      <PlanMenu menus={HK_GHH_DAY} title="A gut-friendly day, plated" showTotal={false} showMacros={false} sub="The rituals are easier when the cooking is done for you. Here's a sample day from our kitchen, delivered fresh across Dubai." />
+      <HkMenu menus={HK_GHH_DAY} eyebrow="Rituals, made easier" title="A gut-friendly day, plated" sub="The rituals are easier when the cooking is done for you. Here's a day on our Gut Healing Protocol, delivered fresh across Dubai." />
       <HkStatBand stats={[
         { val: "7", label: "Daily rituals" },
         { val: "5 min", label: "Or less for each one" },
@@ -1054,6 +1163,7 @@ function GutHealingHabits() {
       <GhhRituals />
       <GhhDay />
       <GhhStick />
+      <Reviews />
       <GhhFAQ />
       <GhhCta />
     </>
@@ -1098,7 +1208,7 @@ function ProtoApp() {
       <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
       <main><GutHealingHabits /></main>
       <Footer onNav={handleNav} onHome={() => go("/")} />
-      <ProtoNotes notes={["Layout now copies the live Gut Healing Protocol page section for section: plan-page hero, numbered list, day-of-meals carousel with green stat strip, green three-card band, Questions & Answers.","Hero photo (Natalia: colourful bowl with greens): hands holding a greens, pumpkin and quinoa bowl from Anna's 31 Oct shoot, framed like the live Gut Healing hero.","Rituals follow the brief's format (name, why it matters, how). Only the morning check-in comes from the doctors' videos (Rita Aoun: “common doesn't always mean normal”); the closing note uses Maison Santé's “stop guessing” message. The other six need approval from Dr Maria Alonso, Rita Aoun and Natalia Belaiche, or replacing with tips from more videos.","Rana / Irina to approve naming Maison Santé as “our partner clinic”. Nothing on the page says Healthy Kitchen has its own doctors. The brief's named “Doctor's voice” tips are left out until names and quotes are approved.","Page title on screen is “Daily Gut Rituals” to avoid “heal” (brief rule). The brief's working name “Gut Healing Habits” and the page URL need the medical lead's sign-off.","Daily-plan dish names need confirming with the kitchen.","Review order: Irina first, then Lyudmila if available, then Natalia."]} />
+      <ProtoNotes notes={["Layout now copies the live Gut Healing Protocol page section for section: plan-page hero, numbered list, day-of-meals carousel with green stat strip, green three-card band, Questions & Answers.","Hero photo (Natalia: colourful bowl with greens): hands holding a greens, pumpkin and quinoa bowl from Anna's 31 Oct shoot, framed like the live Gut Healing hero.","Rituals follow the brief's format (name, why it matters, how). Only the morning check-in comes from the doctors' videos (Rita Aoun: “common doesn't always mean normal”); the closing note uses Maison Santé's “stop guessing” message. The other six need approval from Dr Maria Alonso, Rita Aoun and Natalia Belaiche, or replacing with tips from more videos.","Rana / Irina to approve naming Maison Santé as “our partner clinic”. Nothing on the page says Healthy Kitchen has its own doctors. The brief's named “Doctor's voice” tips are left out until names and quotes are approved.","Page title on screen is “Daily Gut Rituals” to avoid “heal” (brief rule). The brief's working name “Gut Healing Habits” and the page URL need the medical lead's sign-off.","The meal carousel now shows the live Gut Healing Protocol sample day, so every card has real photos, kcal and macros (same as that page).","Reviews section uses the live site's existing customer reviews (Healthy Kitchen in general, not about rituals).","Review order: Irina first, then Lyudmila if available, then Natalia."]} />
     </>
   );
 }
