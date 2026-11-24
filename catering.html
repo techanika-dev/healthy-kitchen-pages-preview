@@ -742,7 +742,7 @@ function HkGreenPanels({ id, watermark, eyebrow, titleTop, titleBottom, intro, i
                 style={{
                   flex: isActive ? "2.4 1 0%" : "1 1 0%", minWidth: 0,
                   display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "18px",
-                  minHeight: "260px", padding: "22px 24px", margin: 0, textAlign: "left",
+                  minHeight: "230px", padding: "22px 24px", margin: 0, textAlign: "left",
                   background: isActive ? "rgba(253,252,248,0.09)" : "rgba(253,252,248,0.02)",
                   border: "1px solid rgba(253,252,248,0.18)", borderRadius: "var(--radius-lg)",
                   color: "inherit", font: "inherit", cursor: "pointer", overflow: "hidden", position: "relative",
@@ -754,20 +754,8 @@ function HkGreenPanels({ id, watermark, eyebrow, titleTop, titleBottom, intro, i
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: 0, position: "relative" }}>
                   <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-300)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxHeight: isActive ? "20px" : "0px", opacity: isActive ? 1 : 0, transition: "all 0.45s ease 0.15s" }}>{it.cap}</span>
                   <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "24px", lineHeight: 1.2, color: "var(--ivory-50)" }}>{it.h}</h3>
-                  <div style={{ maxHeight: isActive ? "520px" : "0px", opacity: isActive ? 1 : 0, overflow: "hidden", transition: "max-height 0.55s var(--ease-out), opacity 0.4s ease 0.15s" }}>
+                  <div style={{ maxHeight: isActive ? "200px" : "0px", opacity: isActive ? 1 : 0, overflow: "hidden", transition: "max-height 0.55s var(--ease-out), opacity 0.4s ease 0.15s" }}>
                     {it.p && <p style={{ margin: 0, fontSize: "15.5px", lineHeight: 1.65, color: "var(--green-100)", maxWidth: "46ch" }}>{it.p}</p>}
-                    {it.list && (
-                      <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "12px", maxWidth: "50ch" }}>
-                        {it.list.map((li) => (
-                          <li key={li.t} style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                            <span style={{ fontSize: "15.5px", fontWeight: 600, color: "var(--ivory-50)" }}>{li.t}</span>
-                            {li.d && <span style={{ fontSize: "14.5px", lineHeight: 1.55, color: "var(--green-100)" }}>{li.d}</span>}
-                            {li.why && <span style={{ fontSize: "14.5px", lineHeight: 1.55, color: "var(--green-100)" }}>{li.why}</span>}
-                            {li.how && <span style={{ fontSize: "14px", lineHeight: 1.5, color: "var(--ivory-50)", marginTop: "2px" }}><span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-300)", marginRight: "8px" }}>How</span>{li.how}</span>}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </div>
                 </div>
               </button>
@@ -791,10 +779,10 @@ function HkGreenPanels({ id, watermark, eyebrow, titleTop, titleBottom, intro, i
 }
 
 // Statement heading + numbered 2x2 list (GutHealingGamble on the live site).
-function HkStatementList({ top, bottom, items, closeTop, closeBottom, bg = "var(--bg-page)", bordered }) {
+function HkStatementList({ id, top, bottom, items, closeTop, closeBottom, bg = "var(--bg-page)", bordered }) {
   React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
   return (
-    <section style={{ background: bg, ...(bordered ? { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" } : {}) }}>
+    <section id={id} style={{ scrollMarginTop: "90px", background: bg, ...(bordered ? { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" } : {}) }}>
       <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px 96px" }}>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: "56px" }}>
           <h2 className="hk-statement" style={{ margin: 0, textAlign: "center", fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 600, lineHeight: 1.08, fontSize: "clamp(28px, 4.2vw, 48px)" }}>
@@ -806,13 +794,14 @@ function HkStatementList({ top, bottom, items, closeTop, closeBottom, bg = "var(
           {items.map((it) => (
             <div key={it.n} style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "flex-start", borderTop: "1px solid var(--border-default)", paddingTop: "20px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "15px", color: "var(--green-700)" }}>{it.n}</span>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "15px", color: "var(--green-700)" }}>{it.n}{it.cap && <span style={{ fontWeight: 500, fontSize: "12px", textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--text-faint)", marginLeft: "12px" }}>{it.cap}</span>}</span>
                 <span aria-hidden="true" style={{ width: "46px", height: "46px", borderRadius: "50%", background: "var(--green-50)", border: "1px solid var(--green-100)", display: "grid", placeItems: "center" }}>
                   <i data-lucide={it.icon} style={{ width: 22, height: 22, color: "var(--green-700)" }}></i>
                 </span>
               </div>
               <h3 style={{ margin: 0, fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "21px", lineHeight: 1.25, color: "var(--text-strong)" }}>{it.h}</h3>
               <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.6, color: "var(--text-muted)" }}>{it.p}</p>
+              {it.how && <p style={{ margin: 0, display: "flex", gap: "10px", alignItems: "baseline", fontSize: "15px", lineHeight: 1.55, color: "var(--text-body)" }}><span style={{ flexShrink: 0, fontSize: "11px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.12em", background: "var(--green-100)", color: "var(--green-800)", borderRadius: "var(--radius-pill)", padding: "3px 9px" }}>How</span>{it.how}</p>}
             </div>
           ))}
         </div>
@@ -828,16 +817,104 @@ function HkStatementList({ top, bottom, items, closeTop, closeBottom, bg = "var(
   );
 }
 
-Object.assign(window, { usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList });
+// Plan-page hero (ProductDetail on the live site): eyebrow, one-line title, hook, text,
+// pill chips, three numbered facts, one ghost button, photo filling the right column.
+function HkPlanHero({ eyebrow, title, hook, text, chip, chips, facts, cta, onCta, img, imgAlt, imgPos }) {
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  const pill = (bg, fg) => ({ display: "inline-flex", alignItems: "center", fontSize: "11px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.12em", background: bg, color: fg, borderRadius: "var(--radius-pill)", padding: "5px 11px" });
+  return (
+    <section style={{ background: "var(--bg-page)" }}>
+      <div className="hk-container hk-plan-hero" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "40px 32px 56px" }}>
+        <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "56px", alignItems: "start" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              <span style={{ fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>{eyebrow}</span>
+              <h1 className="hk-plan-title" style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "0.02em", lineHeight: 1, fontSize: "clamp(34px, 5vw, 58px)", color: "var(--text-strong)", whiteSpace: "nowrap" }}>{title}</h1>
+              <p style={{ margin: 0, fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, lineHeight: 1.25, fontSize: "22px", color: "var(--text-strong)" }}>{hook}</p>
+              <p style={{ margin: 0, fontSize: "18px", lineHeight: 1.55, color: "var(--text-muted)", maxWidth: "46ch" }}>{text}</p>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <span style={pill("var(--clay-100)", "var(--clay-600)")}>{chip}</span>
+                {chips.map((c) => <span key={c} style={pill("var(--green-100)", "var(--green-800)")}>{c}</span>)}
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+              {facts.map((it) => (
+                <div key={it.n} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                  <span style={{ fontFamily: "var(--font-display)", fontSize: "20px", color: "var(--green-600)", lineHeight: 1.3 }}>{it.n}</span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-strong)" }}>{it.h}</span>
+                    <span style={{ fontSize: "14px", color: "var(--text-muted)" }}>{it.p}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={onCta} className="hk-btn-ghost" style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "8px", fontFamily: "var(--font-body)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", lineHeight: 1, border: "1.5px solid var(--green-700)", borderRadius: "var(--radius-md)", cursor: "pointer", padding: "14px 26px", fontSize: "14px", background: "transparent", color: "var(--green-700)", marginTop: "4px" }}>
+              <i data-lucide="arrow-down" style={{ width: 17, height: 17 }}></i> {cta}
+            </button>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignSelf: "stretch" }}>
+            <div style={{ position: "relative", width: "100%", flex: "1 1 auto", minHeight: "520px", borderRadius: "18px", overflow: "hidden" }}>
+              <img src={img} alt={imgAlt} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: imgPos || "50% 50%", display: "block" }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Two-column photo cards (ConsultFormats on the live Consultations page), 16:9 photos.
+function HkFormatCards({ eyebrow, title, cards, footLabel, footCta, onFoot }) {
+  const { SectionHeading, Tag, Button } = window.HealthyKitchenDesignSystem_f4c763;
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  return (
+    <section style={{ background: "var(--bg-page)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "48px" }}>
+          <SectionHeading eyebrow={eyebrow} title={title} />
+        </div>
+        <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px", alignItems: "stretch" }}>
+          {cards.map((f) => (
+            <div key={f.title} className="hk-consult-card" style={{ background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", display: "flex", flexDirection: "column", transition: "transform var(--dur-slow) var(--ease-out), box-shadow var(--dur-slow) var(--ease-out)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ position: "relative" }}>
+                <img src={f.img} alt={f.alt || f.title} style={{ width: "100%", aspectRatio: "16 / 9", objectFit: "cover", objectPosition: f.pos || "50% 50%", display: "block" }} />
+                <span style={{ position: "absolute", top: "16px", left: "16px" }}><Tag tone="green" variant="solid">{f.badge}</Tag></span>
+              </div>
+              <div style={{ padding: "30px 28px 32px", display: "flex", flexDirection: "column", gap: "16px", flex: 1 }}>
+                <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "24px", color: "var(--text-strong)" }}>{f.title}</h3>
+                <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.62, color: "var(--text-muted)" }}>{f.body}</p>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {f.perks.map((p) => (
+                    <li key={p} style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "var(--font-body)", fontSize: "14px", color: "var(--text-body)" }}>
+                      <i data-lucide="check" style={{ width: 16, height: 16, color: "var(--green-700)", flexShrink: 0 }}></i>{p}
+                    </li>
+                  ))}
+                </ul>
+                <div style={{ marginTop: "auto", paddingTop: "18px", borderTop: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--text-faint)" }}>{footLabel}</span>
+                  <Button variant="primary" size="md" onClick={onFoot}>{footCta}</Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList, HkPlanHero, HkFormatCards });
 
 // Gut Smart Catering: new page for healthykitchen.delivery (route: /catering).
-// Built only from section patterns already on the live site, so it matches:
-//   Hero ............. ConsultHero (text + 4:5 photo, soft Tags)
-//   Differentiators .. GutHealingGamble (statement heading + numbered 2x2 list) -> HkStatementList
-//   Who it's for ..... ConsultFormats (photo cards with a Tag badge and check list)
-//   Your event ....... AboutStory (photo + heading + text + green info box)
-//   Menu ............. PlanMenu (carousel with tabs) + green stat strip -> HkStatBand
-//   How it works ..... GutHealingPhases (green band, expanding panels) -> HkGreenPanels
+// Same flow and pieces as the live plan pages:
+//   Hero ............. ProductDetail plan hero -> HkPlanHero
+//   Differentiators .. GutHealingGamble (statement + numbered 2x2 list) -> HkStatementList
+//   Who it's for ..... ConsultFormats (2 columns, 16:9 photos) -> HkFormatCards
+//   Your event ....... AboutStory (4:5 photo + heading + text + green info box) + PlanMenu-style cards (4:3)
+//   Menu ............. live PlanMenu (tabs, 4:3 photos) + green stat strip -> HkStatBand
+//   How it works ..... GutHealingPhases (green band, 3 panels) -> HkGreenPanels
 //   Questions ........ FAQ (live component)
 // Positioning (Natalia): not ordinary catering, but gut-friendly, protocol-conscious food.
 const { Button, SectionHeading, Tag, Input } = window.HealthyKitchenDesignSystem_f4c763;
@@ -856,105 +933,65 @@ const catScrollTo = (id) => {
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
 };
 
-/* ---------- Hero (ConsultHero pattern) ---------- */
+/* ---------- Hero (same as the plan pages) ---------- */
 function CatHero() {
   return (
-    <section style={{ background: "var(--bg-page)" }}>
-      <div className="hk-container hk-grid-2 hk-hero-grid" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "72px 32px 64px", display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: "56px", alignItems: "center" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
-          <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>
-            Gut-friendly catering · Dubai
-          </span>
-          <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "0.02em", lineHeight: 1.02, fontSize: "clamp(36px, 5.5vw, 60px)", color: "var(--text-strong)" }}>
-            Gut Smart<br />
-            <span style={{ color: "var(--green-700)" }}>Catering</span>
-          </h1>
-          <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "18px", lineHeight: 1.6, color: "var(--text-muted)", maxWidth: "48ch" }}>
-            Beautiful food for gatherings, made for people who care what they eat. Every dish is gluten-free and sugar-free, rich in fibre and fermented foods, with AIP and Low FODMAP options for guests who need them.
-          </p>
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
-            <Button variant="primary" size="lg" onClick={() => catScrollTo("cat-enquire")}>Request a Quote</Button>
-            <Button variant="ghost" size="lg" iconLeft={<i data-lucide="message-circle" style={{ width: 17, height: 17 }}></i>} onClick={catWhatsApp}>WhatsApp Us</Button>
-          </div>
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <Tag tone="green" variant="soft">Fully gluten-free</Tag>
-            <Tag tone="green" variant="soft">Sugar-free</Tag>
-            <Tag tone="green" variant="soft">Gut-friendly</Tag>
-            <Tag tone="green" variant="soft">AIP & Low FODMAP</Tag>
-          </div>
-        </div>
-        <img src={HK_IMG("cat-table.jpg")} alt="A dining table set with Healthy Kitchen bowls and salads" style={{ width: "100%", height: "auto", aspectRatio: "4 / 5", objectFit: "cover", borderRadius: "18px", display: "block" }} />
-      </div>
-    </section>
+    <HkPlanHero
+      eyebrow="Gut-friendly catering · Dubai"
+      title="Gut Smart Catering"
+      hook="Beautiful food every guest can safely enjoy."
+      text="Catering for people who care what they eat. Every dish is gluten-free and sugar-free, rich in fibre and fermented foods, with AIP and Low FODMAP options for guests who need them. Made fresh in Dubai on the day of your event."
+      chip="Celiac-friendly"
+      chips={["Gluten-free", "Sugar-free", "Gut-friendly"]}
+      facts={[
+        { n: "01", h: "Fully gluten-free & sugar-free", p: "Safe for celiac guests and anyone avoiding sugar" },
+        { n: "02", h: "Made for the gut", p: "Fermented foods, fibre and a wide variety of vegetables" },
+        { n: "03", h: "AIP & Low FODMAP on request", p: "Planned around your guests' dietary protocols" },
+      ]}
+      cta="Request a Quote"
+      onCta={() => catScrollTo("cat-enquire")}
+      img={HK_IMG("cat-table.jpg")}
+      imgAlt="A table of Healthy Kitchen bowls and salads seen from above"
+      imgPos="50% 40%" />
   );
 }
 
 /* ---------- What makes it different (statement + numbered list) ---------- */
 // Scope of "fully gluten-free" and "sugar-free" to be confirmed against Irina's brief.
 const HK_CAT_PILLARS = [
-  { n: "01", icon: "wheat-off", h: "Fully gluten-free and sugar-free", p: "Every dish is gluten-free, celiac-friendly and made without sugar, so no guest has to ask what's safe to eat." },
-  { n: "02", icon: "sprout", h: "Good for the gut", p: "Fermented foods, fibre-rich ingredients and a wide variety of vegetables in every menu, with microbiome bowls at the centre." },
-  { n: "03", icon: "clipboard-check", h: "Ready for special protocols", p: "AIP-friendly dishes for autoimmune protocols and Low FODMAP options, planned around your guests' intolerances." },
-  { n: "04", icon: "salad", h: "Made for mingling", p: "Microbiome bowls, salads in small jars and healthy finger food: small, easy portions in place of pastries and processed canapés." },
+  { n: "01", icon: "wheat-off", h: "Fully gluten-free", p: "Gluten-free from the first bite to the last, so it's safe for guests with celiac disease. Nobody needs a separate plate." },
+  { n: "02", icon: "sprout", h: "Gut-friendly by design", p: "Fermented foods, fibre-rich ingredients and many kinds of vegetables in every menu, with microbiome bowls at the centre of the table." },
+  { n: "03", icon: "clipboard-check", h: "Ready for special protocols", p: "AIP-friendly and Low FODMAP options, all sugar-free, for guests following a protocol or avoiding certain foods." },
+  { n: "04", icon: "salad", h: "Served the healthy way", p: "Microbiome bowls, salads in small jars and healthy finger food: small, easy portions instead of pastries and processed canapés." },
 ];
 
 function CatPillars() {
-  return <HkStatementList top="Not ordinary catering" bottom="Food every guest can enjoy" items={HK_CAT_PILLARS}
-    closeTop="For guests with gut-health concerns or celiac disease," closeBottom="and those avoiding sugar, on AIP or Low FODMAP" bg="var(--surface-card)" bordered />;
+  return <HkStatementList top="Not your usual" bottom="catering" items={HK_CAT_PILLARS}
+    closeTop="Made for guests who care what they eat," closeBottom="and for the ones who have to" />;
 }
 
-/* ---------- Who it's for (ConsultFormats card pattern) ---------- */
-// Photos: HK shoots. Retreat photo is an HK wellness shot, not a real retreat (ask Irina).
+/* ---------- Who it's for (ConsultFormats: two columns, 16:9 photos) ---------- */
+// Corporate and the hero are from the 31 Oct shoot. Private and special occasion are earlier
+// HK shoots; the retreat photo is an HK wellness shot, not a real retreat (ask Irina/Natalia).
 const HK_CAT_OCCASIONS = [
-  { badge: "Corporate", title: "Corporate Events", img: "cat-corporate.jpg", body: "Team lunches, board meetings, launches and wellness days. One table of varied dishes that everyone in the room can eat.", perks: ["Individual portions or a shared table", "Labelled for dietary needs"] },
-  { badge: "At home", title: "Private Gatherings", img: "cat-private.jpg", body: "Dinners at home, family celebrations and weekend brunches, beautifully arranged and ready to serve.", perks: ["Sharing platters and bowls", "Menus planned around your guests"] },
-  { badge: "Wellness", title: "Wellness Retreats", img: "cat-retreat.jpg", body: "Yoga days, retreat weekends and studio events, with food as thoughtful as the programme itself.", perks: ["Light, gut-friendly menus", "Cold-pressed drinks available"] },
-  { badge: "Celebrations", title: "Special Occasions", img: "cat-occasion.jpg", body: "Birthdays, baby showers and milestones, with sugar-free sweet treats that every guest can share.", perks: ["Healthy finger food", "Sugar-free desserts"] },
+  { badge: "Corporate", title: "Corporate Events", img: HK_IMG("cat-corporate.jpg"), body: "Team lunches, board meetings, launches and wellness days. A table of varied dishes that everyone in the room can eat, whatever their diet.", perks: ["Individual portions or a shared table", "Every dish labelled for dietary needs"] },
+  { badge: "At home", title: "Private Gatherings", img: HK_IMG("cat-private.jpg"), body: "Dinners, family celebrations and weekend brunches at home, beautifully arranged and ready to serve.", perks: ["Sharing platters, bowls and jars", "Menus planned around your guests"] },
+  { badge: "Wellness", title: "Wellness Retreats", img: HK_IMG("cat-retreat.jpg"), pos: "50% 35%", body: "Yoga days, retreat weekends and studio events, with food as thoughtful as the programme itself.", perks: ["Light, gut-friendly menus", "AIP and Low FODMAP on request"] },
+  { badge: "Celebrations", title: "Special Occasions", img: HK_IMG("cat-occasion.jpg"), body: "Birthdays, baby showers and milestones, with sugar-free sweet treats that every guest can share.", perks: ["Healthy finger food", "Sugar-free desserts"] },
 ];
 
 function CatOccasions() {
-  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
-  return (
-    <section style={{ background: "var(--bg-page)" }}>
-      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: "48px" }}>
-          <SectionHeading eyebrow="Who it's for" title="Made for every occasion" />
-        </div>
-        <div className="hk-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "20px", alignItems: "stretch" }}>
-          {HK_CAT_OCCASIONS.map((f) => (
-            <div key={f.title} style={{ background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", display: "flex", flexDirection: "column", transition: "transform var(--dur-slow) var(--ease-out), box-shadow var(--dur-slow) var(--ease-out)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
-              <div style={{ position: "relative" }}>
-                <img src={HK_IMG(f.img)} alt={f.title} style={{ width: "100%", aspectRatio: "4 / 5", objectFit: "cover", display: "block" }} />
-                <span style={{ position: "absolute", top: "16px", left: "16px" }}><Tag tone="green" variant="solid">{f.badge}</Tag></span>
-              </div>
-              <div style={{ padding: "24px 22px 26px", display: "flex", flexDirection: "column", gap: "14px", flex: 1 }}>
-                <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "22px", color: "var(--text-strong)" }}>{f.title}</h3>
-                <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.62, color: "var(--text-muted)" }}>{f.body}</p>
-                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {f.perks.map((p) => (
-                    <li key={p} style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "var(--font-body)", fontSize: "14px", color: "var(--text-body)" }}>
-                      <i data-lucide="check" style={{ width: 16, height: 16, color: "var(--green-700)", flexShrink: 0 }}></i>{p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+  return <HkFormatCards eyebrow="Who it's for" title="Made for every occasion" cards={HK_CAT_OCCASIONS}
+    footLabel="Quote on request" footCta="Enquire" onFoot={() => catScrollTo("cat-enquire")} />;
 }
 
 /* ---------- Your event, your menu (AboutStory pattern + presentation cards) ---------- */
 // Card style = the site's PlanMenu meal cards. Bowl photo is a 31 Oct greens bowl,
 // jar photo is the chia pudding jar: swap for Irina's catering shots (microbiome bowl, salad jars).
 const HK_CAT_SERVED = [
-  { kind: "Bowls", title: "Microbiome bowls", img: "serve-bowl.jpg", ratio: "4 / 5", desc: "Greens, fermented vegetables and fibre-rich grains, in a bowl for each guest." },
-  { kind: "Jars", title: "Salads and puddings in small jars", img: "serve-jars.jpg", ratio: "4 / 5", desc: "Easy to pick up, easy to carry, and no plates needed." },
-  { kind: "Finger food", title: "Healthy bites", img: "serve-finger.jpg", ratio: "4 / 5", desc: "Sugar-free sweet bites and gluten-free savoury pieces, in place of pastries." },
+  { kind: "Bowls", title: "Microbiome bowls", img: "serve-bowl.jpg", ratio: "4 / 3", desc: "Greens, fermented vegetables and fibre-rich grains, in a bowl for each guest." },
+  { kind: "Jars", title: "Salads and puddings in small jars", img: "serve-jars.jpg", ratio: "4 / 3", desc: "Easy to pick up, easy to carry, and no plates needed." },
+  { kind: "Finger food", title: "Healthy bites", img: "serve-finger.jpg", ratio: "4 / 3", desc: "Sugar-free sweet bites and gluten-free savoury pieces, in place of pastries." },
 ];
 
 function CatServe() {
@@ -972,7 +1009,7 @@ function CatServe() {
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <SectionHeading eyebrow="Your event, your menu" title="Wellness food, made for sharing" align="left" />
             <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "17px", lineHeight: 1.65, color: "var(--text-body)" }}>
-              Most event food is pastry, white bread and sugar. Ours is the opposite: real, nourishing food in small, easy portions that guests can enjoy while they mingle. You choose the dishes, individual portions or a buffet, and we tailor the menu around every guest's dietary needs.
+              Most event food is pastry, white bread and sugar. Ours is the opposite: real, nourishing food in small portions that guests can pick up while they talk. Choose individual portions or a buffet, and we tailor every dish around your guests' dietary needs.
             </p>
             <div style={{ background: "var(--green-50, rgba(46,89,60,0.06))", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", padding: "20px 22px", display: "flex", gap: "16px", alignItems: "flex-start" }}>
               <i data-lucide="leaf" style={{ width: 22, height: 22, color: "var(--green-700)", flexShrink: 0, marginTop: "2px" }}></i>
@@ -1006,96 +1043,42 @@ function CatServe() {
   );
 }
 
-/* ---------- Menu (live PlanMenu component, with tabs) ---------- */
-// Dish names exactly as in the brief. Publish only verified dishes. Photos only where an
-// HK photo clearly shows that dish; the rest show PlanMenu's own "photo" placeholder.
+/* ---------- Menu (live PlanMenu component, with tabs, 4:3 photos) ---------- */
+// Dish names exactly as in the brief. Publish only verified dishes. Photos: HK shoots and the
+// live site's own meal photos where they show the same dish; the rest show PlanMenu's placeholder.
 const HK_CAT_MENU = [
-  { label: "Finger Foods", ratio: "4 / 5", meals: [
+  { label: "Finger Foods", meals: [
     { meal: "Finger food", title: "GF Mini Zucchini Pancakes with Salmon", img: HK_IMG("dish-zucchini-pancakes.jpg"), desc: "Small gluten-free pancakes, easy to eat while you mingle." },
-    { meal: "Finger food", title: "GF Mini Waffles with Salmon & Guacamole", desc: "Gluten-free mini waffles, served in small portions." },
+    { meal: "Finger food", title: "GF Mini Waffles with Salmon & Guacamole", img: HK_IMG("dish-mini-waffles.jpg"), desc: "Gluten-free waffles with smoked salmon and guacamole." },
     { meal: "Finger food", title: "Chia Pudding with Mango", desc: "Served in small individual jars." },
     { meal: "Finger food", title: "Cacao Nut Balls", img: HK_IMG("dish-cacao-balls.jpg"), desc: "A sugar-free sweet bite." },
     { meal: "Finger food", title: "Coconut Mini Balls", img: HK_IMG("dish-coconut-balls.jpg"), desc: "A sugar-free sweet bite." },
     { meal: "Finger food", title: "Keto Brownie Bites", img: HK_IMG("dish-brownie-bites.jpg"), desc: "Rich, sugar-free brownie in small squares." },
   ] },
   { label: "Mains", meals: [
+    { meal: "Main", title: "Microbiome Bowl", img: "assets/meals/gut-lunch.jpg", desc: "Fermented foods, fibre and many kinds of vegetables." },
     { meal: "Main", title: "Konjac Pasta with Pesto & Chicken", img: "assets/meals/aip-dinner.jpg", desc: "Individual portions or to share." },
-    { meal: "Main", title: "Turkey Stroganoff with Mushrooms & Quinoa", desc: "Individual portions or to share." },
     { meal: "Main", title: "Wild Salmon with Broccoli", img: "assets/meals/longevity-dinner.jpg", desc: "Individual portions or to share." },
-    { meal: "Main", title: "Kale Beetroot Quinoa Salad with Organic Chicken", desc: "Also served in small jars." },
     { meal: "Main", title: "Kale Pumpkin Quinoa Salad with Organic Chicken", img: HK_IMG("dish-kale-pumpkin-salad.jpg"), desc: "Also served in small jars." },
-    { meal: "Main", title: "Microbiome Bowl", desc: "Fermented foods, fibre and many kinds of vegetables." },
+    { meal: "Main", title: "Kale Beetroot Quinoa Salad with Organic Chicken", img: HK_IMG("dish-kale-beetroot-salad.jpg"), desc: "Also served in small jars." },
+    { meal: "Main", title: "Turkey Stroganoff with Mushrooms & Quinoa", desc: "Individual portions or to share." },
     { meal: "Main", title: "Blue Zones Bowl", desc: "Individual bowls for each guest." },
     { meal: "Main", title: "Healthy Caesar Salad with Organic Chicken & Cashew Mayo", desc: "Individual portions or to share." },
     { meal: "Main", title: "Longevity Salad", desc: "Individual portions or to share." },
   ] },
   { label: "Drinks", meals: [
-    { meal: "Drinks", title: "Cold-pressed juices", img: "assets/plans/detox-cleanse-cover.jpg", desc: "Our bottled drinks can be added to any order. Ask for the current selection with your quote." },
+    { meal: "Drink", title: "Super Duper detox juice", img: "assets/meals/dc-drink-1.jpg", desc: "Cold-pressed and bottled. Drinks list to confirm with your quote." },
+    { meal: "Drink", title: "Glowing skin juice", img: "assets/meals/dc-drink-3.jpg", desc: "Cold-pressed and bottled." },
+    { meal: "Drink", title: "Lean green smoothie", img: "assets/meals/ed-drink-2.jpg", desc: "Bottled smoothie, sugar-free." },
+    { meal: "Drink", title: "Matcha wake up smoothie", img: "assets/meals/dc-drink-2.jpg", desc: "Bottled smoothie, sugar-free." },
   ] },
 ];
 
-// Same markup and styles as the live PlanMenu carousel, plus a photo shape per tab:
-// finger-food photos are portrait close-ups, so that tab uses 4:5 cards instead of
-// cropping them to 4:3 (which made them look zoomed in).
-function CatMenuCarousel({ menus, title, sub }) {
-  const [idx, setIdx] = React.useState(0);
-  const scrollRef = React.useRef(null);
-  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); if (scrollRef.current) scrollRef.current.scrollLeft = 0; }, [idx]);
-  const menu = menus[idx];
-  const scrollBy = (dir) => { if (scrollRef.current) scrollRef.current.scrollBy({ left: dir * 340, behavior: "smooth" }); };
-  const arrowStyle = (side) => ({
-    position: "absolute", top: "50%", transform: "translateY(-50%)", [side]: "-18px",
-    width: "40px", height: "40px", borderRadius: "50%", border: "1px solid var(--border-subtle)",
-    background: "rgba(253,252,248,0.7)", color: "var(--text-muted)", cursor: "pointer",
-    display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2, opacity: 0.55, boxShadow: "var(--shadow-xs)",
-  });
-  return (
-    <section id="day" style={{ background: "var(--bg-subtle)", borderTop: "1px solid var(--border-subtle)" }}>
-      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "flex-start", marginBottom: "36px" }}>
-          <span style={{ fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>Menu preview</span>
-          <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", lineHeight: 1.05, fontSize: "clamp(28px, 5vw, 40px)", color: "var(--text-strong)" }}>{title}</h2>
-          <p style={{ margin: 0, fontSize: "17px", lineHeight: 1.5, color: "var(--text-muted)", maxWidth: "56ch" }}>{sub}</p>
-        </div>
-        <div style={{ display: "inline-flex", background: "var(--white)", border: "1px solid var(--border-default)", borderRadius: "var(--radius-pill)", padding: "4px", gap: "4px", marginBottom: "28px" }}>
-          {menus.map((m, i) => (
-            <button key={i} onClick={() => setIdx(i)} style={{
-              cursor: "pointer", border: 0, borderRadius: "var(--radius-pill)", padding: "9px 22px",
-              fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)",
-              background: i === idx ? "var(--green-700)" : "transparent", color: i === idx ? "var(--ivory-50)" : "var(--text-muted)",
-              transition: "all var(--dur-base) var(--ease-out)",
-            }}>{m.label}</button>
-          ))}
-        </div>
-        <div style={{ position: "relative", margin: "0 8px" }}>
-          <button type="button" onClick={() => scrollBy(-1)} aria-label="Scroll left" style={arrowStyle("left")}><i data-lucide="chevron-left" style={{ width: 18, height: 18 }}></i></button>
-          <button type="button" onClick={() => scrollBy(1)} aria-label="Scroll right" style={arrowStyle("right")}><i data-lucide="chevron-right" style={{ width: 18, height: 18 }}></i></button>
-          <div ref={scrollRef} style={{ display: "flex", gap: "20px", overflowX: "auto", scrollSnapType: "x mandatory", padding: "2px 2px 6px", scrollbarWidth: "none" }}>
-            {menu.meals.map((m, i) => (
-              <div key={menu.label + i} style={{ flex: "0 0 280px", scrollSnapAlign: "start", display: "flex", flexDirection: "column", background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", boxShadow: "var(--shadow-xs)" }}>
-                <div style={{ position: "relative", aspectRatio: menu.ratio || "4 / 3", background: m.img ? "var(--ivory-100)" : "repeating-linear-gradient(45deg, var(--ivory-200), var(--ivory-200) 9px, var(--ivory-100) 9px, var(--ivory-100) 18px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  {m.img
-                    ? <img src={m.img} alt={m.title} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-                    : <span style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: "10px", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--ink-400)", background: "var(--ivory-50)", padding: "4px 8px", borderRadius: "var(--radius-sm)" }}>{m.meal} photo</span>}
-                </div>
-                <div style={{ flex: "1 1 auto", display: "flex", flexDirection: "column", gap: "12px", padding: "22px" }}>
-                  <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-600)" }}>{m.meal}</span>
-                  <h3 style={{ margin: 0, minHeight: "calc(20px * 1.15 * 2)", fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, fontSize: "20px", lineHeight: 1.15, color: "var(--text-strong)" }}>{m.title}</h3>
-                  <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "13.5px", lineHeight: 1.5, color: "var(--text-muted)" }}>{m.desc || ""}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function CatMenu() {
+  usePlanMenuEyebrow("Menu preview");
   return (
     <>
-      <CatMenuCarousel menus={HK_CAT_MENU} title="A taste of the menu" sub="Finger food, mains and drinks, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
+      <PlanMenu menus={HK_CAT_MENU} title="A taste of the menu" showTotal={false} showMacros={false} sub="Finger food, mains and drinks, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
       <HkStatBand stats={[
         { val: "100%", label: "Gluten-free" },
         { val: "0g", label: "Added sugar" },
@@ -1108,9 +1091,9 @@ function CatMenu() {
 
 /* ---------- How it works (green band, expanding panels) ---------- */
 const HK_CAT_STEPS = [
-  { n: "01", icon: "send", cap: "Step one", h: "Send an enquiry", p: "Tell us the date, the number of guests, the occasion and any dietary needs, using the form below or on WhatsApp." },
-  { n: "02", icon: "clipboard-list", cap: "Step two", h: "Get your quote", p: "Our team suggests a menu and serving style for your event and sends a tailored quote for you to review." },
-  { n: "03", icon: "truck", cap: "Step three", h: "We deliver", p: "Everything is made fresh by our chefs on the day and delivered across Dubai, ready to serve." },
+  { n: "01", icon: "send", cap: "Step one", h: "Send an enquiry", p: "Tell us the date, guest numbers, occasion and dietary needs, here or on WhatsApp." },
+  { n: "02", icon: "clipboard-list", cap: "Step two", h: "Get your quote", p: "We suggest a menu and serving style, and send a tailored quote to review." },
+  { n: "03", icon: "truck", cap: "Step three", h: "We deliver", p: "Made fresh by our chefs on the day and delivered across Dubai, ready to serve." },
 ];
 
 function CatSteps() {
@@ -1289,7 +1272,7 @@ function ProtoApp() {
       <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
       <main><Catering /></main>
       <Footer onNav={handleNav} onHome={() => go("/")} />
-      <ProtoNotes notes={["“Fully gluten-free” and “fully sugar-free” are Natalia's words. Irina's brief says not to claim this unless every dish is verified, so Irina must confirm before publishing.","Anti-Candida is left out of this page on purpose (Natalia).","New photos: corporate table and hands serving are from the 31 Oct shoot. Private gathering and special occasion are from earlier HK shoots (festive table, tart stand). Confirm with Natalia or Irina, or swap for her book and event photos.","Wellness retreats uses an HK yoga/meditation shot, not a real retreat. Ask Irina for photos from a past retreat.","Finger foods now show small-portion HK photos (mini pancakes, nut balls, coconut balls, brownie bites). Irina to confirm each photo is the catering version of that dish.","Still missing: real salads-in-jars and Microbiome Bowl catering shots (the “served” row uses a greens bowl and the chia jar for now), mini waffles, chia pudding with mango and some mains. Ask Irina.","Finger-food photos are shown uncropped in portrait cards so they don't look zoomed in. The brownie photo is a close-up; a wider catering shot would be better.","Drinks list to confirm with Irina. Page name “Gut Smart Catering” still to confirm. Stat strip (100% gluten-free, 0g added sugar) and FAQ answers need Irina's confirmation.","Testimonials are hidden (no real catering reviews yet). The enquiry form sends nothing yet."]} />
+      <ProtoNotes notes={["Layout now copies live pages: plan-page hero, numbered differentiators, two-column occasion cards with 16:9 photos (as on Consultations), the live menu carousel with 4:3 photos, green three-card band, Questions & Answers.","“Fully gluten-free” and “sugar-free” are Natalia's words. Irina's brief says not to claim this unless every dish is verified, so Irina must confirm before publishing. Anti-Candida is left out on purpose (Natalia).","New photos from the 31 Oct shoot: hero (overhead table of dishes) and Corporate Events (long table of varied dishes). Private gathering and special occasion are earlier HK shoots; Wellness Retreats is an HK yoga shot, not a real retreat. Ask Natalia/Irina for her book and past-event photos.","New menu photos from the Yandex archive: mini waffles with salmon & guacamole (Oct 2024 shoot) and kale beetroot quinoa salad (Dec 2024 phone shot; no chicken in the photo). From the live site: Microbiome Bowl (the live “Pharmacy bowl” photo, which the brief suggests renaming), konjac pasta (live photo shows salmon, not chicken) and the drinks. Irina to confirm each matches the catering version.","Top-down finger-food photos are turned sideways to fit the site's 4:3 cards without zooming in. The brownie photo is a close-up; a wider shot would be better.","Searched all 2,147 Yandex photos and the 31 Oct shoot. Still no photo of: chia pudding with mango (only a berry chia jar exists), turkey stroganoff, Blue Zones bowl, Healthy Caesar, Longevity salad, and catering salads in jars. Ask Irina.","Drinks list is a sample from the live plans; confirm the catering drinks. Stat strip and FAQ answers need Irina's confirmation. Page name “Gut Smart Catering” still to confirm.","Testimonials are hidden (no real catering reviews yet). The enquiry form sends nothing."]} />
     </>
   );
 }

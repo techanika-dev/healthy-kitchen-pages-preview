@@ -742,7 +742,7 @@ function HkGreenPanels({ id, watermark, eyebrow, titleTop, titleBottom, intro, i
                 style={{
                   flex: isActive ? "2.4 1 0%" : "1 1 0%", minWidth: 0,
                   display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "18px",
-                  minHeight: "260px", padding: "22px 24px", margin: 0, textAlign: "left",
+                  minHeight: "230px", padding: "22px 24px", margin: 0, textAlign: "left",
                   background: isActive ? "rgba(253,252,248,0.09)" : "rgba(253,252,248,0.02)",
                   border: "1px solid rgba(253,252,248,0.18)", borderRadius: "var(--radius-lg)",
                   color: "inherit", font: "inherit", cursor: "pointer", overflow: "hidden", position: "relative",
@@ -754,20 +754,8 @@ function HkGreenPanels({ id, watermark, eyebrow, titleTop, titleBottom, intro, i
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px", minWidth: 0, position: "relative" }}>
                   <span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-300)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxHeight: isActive ? "20px" : "0px", opacity: isActive ? 1 : 0, transition: "all 0.45s ease 0.15s" }}>{it.cap}</span>
                   <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "24px", lineHeight: 1.2, color: "var(--ivory-50)" }}>{it.h}</h3>
-                  <div style={{ maxHeight: isActive ? "520px" : "0px", opacity: isActive ? 1 : 0, overflow: "hidden", transition: "max-height 0.55s var(--ease-out), opacity 0.4s ease 0.15s" }}>
+                  <div style={{ maxHeight: isActive ? "200px" : "0px", opacity: isActive ? 1 : 0, overflow: "hidden", transition: "max-height 0.55s var(--ease-out), opacity 0.4s ease 0.15s" }}>
                     {it.p && <p style={{ margin: 0, fontSize: "15.5px", lineHeight: 1.65, color: "var(--green-100)", maxWidth: "46ch" }}>{it.p}</p>}
-                    {it.list && (
-                      <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "12px", maxWidth: "50ch" }}>
-                        {it.list.map((li) => (
-                          <li key={li.t} style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                            <span style={{ fontSize: "15.5px", fontWeight: 600, color: "var(--ivory-50)" }}>{li.t}</span>
-                            {li.d && <span style={{ fontSize: "14.5px", lineHeight: 1.55, color: "var(--green-100)" }}>{li.d}</span>}
-                            {li.why && <span style={{ fontSize: "14.5px", lineHeight: 1.55, color: "var(--green-100)" }}>{li.why}</span>}
-                            {li.how && <span style={{ fontSize: "14px", lineHeight: 1.5, color: "var(--ivory-50)", marginTop: "2px" }}><span style={{ fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--green-300)", marginRight: "8px" }}>How</span>{li.how}</span>}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </div>
                 </div>
               </button>
@@ -791,10 +779,10 @@ function HkGreenPanels({ id, watermark, eyebrow, titleTop, titleBottom, intro, i
 }
 
 // Statement heading + numbered 2x2 list (GutHealingGamble on the live site).
-function HkStatementList({ top, bottom, items, closeTop, closeBottom, bg = "var(--bg-page)", bordered }) {
+function HkStatementList({ id, top, bottom, items, closeTop, closeBottom, bg = "var(--bg-page)", bordered }) {
   React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
   return (
-    <section style={{ background: bg, ...(bordered ? { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" } : {}) }}>
+    <section id={id} style={{ scrollMarginTop: "90px", background: bg, ...(bordered ? { borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" } : {}) }}>
       <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px 96px" }}>
         <div style={{ display: "flex", justifyContent: "center", marginBottom: "56px" }}>
           <h2 className="hk-statement" style={{ margin: 0, textAlign: "center", fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 600, lineHeight: 1.08, fontSize: "clamp(28px, 4.2vw, 48px)" }}>
@@ -806,13 +794,14 @@ function HkStatementList({ top, bottom, items, closeTop, closeBottom, bg = "var(
           {items.map((it) => (
             <div key={it.n} style={{ display: "flex", flexDirection: "column", gap: "14px", alignItems: "flex-start", borderTop: "1px solid var(--border-default)", paddingTop: "20px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "15px", color: "var(--green-700)" }}>{it.n}</span>
+                <span style={{ fontFamily: "var(--font-body)", fontWeight: 700, fontSize: "15px", color: "var(--green-700)" }}>{it.n}{it.cap && <span style={{ fontWeight: 500, fontSize: "12px", textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--text-faint)", marginLeft: "12px" }}>{it.cap}</span>}</span>
                 <span aria-hidden="true" style={{ width: "46px", height: "46px", borderRadius: "50%", background: "var(--green-50)", border: "1px solid var(--green-100)", display: "grid", placeItems: "center" }}>
                   <i data-lucide={it.icon} style={{ width: 22, height: 22, color: "var(--green-700)" }}></i>
                 </span>
               </div>
               <h3 style={{ margin: 0, fontFamily: "var(--font-body)", fontWeight: 800, fontSize: "21px", lineHeight: 1.25, color: "var(--text-strong)" }}>{it.h}</h3>
               <p style={{ margin: 0, fontSize: "15px", lineHeight: 1.6, color: "var(--text-muted)" }}>{it.p}</p>
+              {it.how && <p style={{ margin: 0, display: "flex", gap: "10px", alignItems: "baseline", fontSize: "15px", lineHeight: 1.55, color: "var(--text-body)" }}><span style={{ flexShrink: 0, fontSize: "11px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.12em", background: "var(--green-100)", color: "var(--green-800)", borderRadius: "var(--radius-pill)", padding: "3px 9px" }}>How</span>{it.how}</p>}
             </div>
           ))}
         </div>
@@ -828,17 +817,105 @@ function HkStatementList({ top, bottom, items, closeTop, closeBottom, bg = "var(
   );
 }
 
-Object.assign(window, { usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList });
+// Plan-page hero (ProductDetail on the live site): eyebrow, one-line title, hook, text,
+// pill chips, three numbered facts, one ghost button, photo filling the right column.
+function HkPlanHero({ eyebrow, title, hook, text, chip, chips, facts, cta, onCta, img, imgAlt, imgPos }) {
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  const pill = (bg, fg) => ({ display: "inline-flex", alignItems: "center", fontSize: "11px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.12em", background: bg, color: fg, borderRadius: "var(--radius-pill)", padding: "5px 11px" });
+  return (
+    <section style={{ background: "var(--bg-page)" }}>
+      <div className="hk-container hk-plan-hero" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "40px 32px 56px" }}>
+        <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "56px", alignItems: "start" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+              <span style={{ fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>{eyebrow}</span>
+              <h1 className="hk-plan-title" style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "0.02em", lineHeight: 1, fontSize: "clamp(34px, 5vw, 58px)", color: "var(--text-strong)", whiteSpace: "nowrap" }}>{title}</h1>
+              <p style={{ margin: 0, fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, lineHeight: 1.25, fontSize: "22px", color: "var(--text-strong)" }}>{hook}</p>
+              <p style={{ margin: 0, fontSize: "18px", lineHeight: 1.55, color: "var(--text-muted)", maxWidth: "46ch" }}>{text}</p>
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <span style={pill("var(--clay-100)", "var(--clay-600)")}>{chip}</span>
+                {chips.map((c) => <span key={c} style={pill("var(--green-100)", "var(--green-800)")}>{c}</span>)}
+              </div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+              {facts.map((it) => (
+                <div key={it.n} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                  <span style={{ fontFamily: "var(--font-display)", fontSize: "20px", color: "var(--green-600)", lineHeight: 1.3 }}>{it.n}</span>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                    <span style={{ fontSize: "15px", fontWeight: 600, color: "var(--text-strong)" }}>{it.h}</span>
+                    <span style={{ fontSize: "14px", color: "var(--text-muted)" }}>{it.p}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button onClick={onCta} className="hk-btn-ghost" style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "8px", fontFamily: "var(--font-body)", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", lineHeight: 1, border: "1.5px solid var(--green-700)", borderRadius: "var(--radius-md)", cursor: "pointer", padding: "14px 26px", fontSize: "14px", background: "transparent", color: "var(--green-700)", marginTop: "4px" }}>
+              <i data-lucide="arrow-down" style={{ width: 17, height: 17 }}></i> {cta}
+            </button>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", alignSelf: "stretch" }}>
+            <div style={{ position: "relative", width: "100%", flex: "1 1 auto", minHeight: "520px", borderRadius: "18px", overflow: "hidden" }}>
+              <img src={img} alt={imgAlt} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: imgPos || "50% 50%", display: "block" }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-// Gut Healing Habits (Daily Rituals): new page for healthykitchen.delivery.
-// Same flow and building blocks as the live plan pages (Gut Healing Protocol etc.):
-//   Hero ............ AboutHero / ConsultHero (text + 4:5 photo, soft Tags)
-//   Statement ....... GutHealingGamble ("When your gut runs the show")  -> HkStatementList
-//   Daily rituals ... GutHealingPhases (green band, expanding panels)  -> HkGreenPanels
+// Two-column photo cards (ConsultFormats on the live Consultations page), 16:9 photos.
+function HkFormatCards({ eyebrow, title, cards, footLabel, footCta, onFoot }) {
+  const { SectionHeading, Tag, Button } = window.HealthyKitchenDesignSystem_f4c763;
+  React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
+  return (
+    <section style={{ background: "var(--bg-page)" }}>
+      <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "84px 32px" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "48px" }}>
+          <SectionHeading eyebrow={eyebrow} title={title} />
+        </div>
+        <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "28px", alignItems: "stretch" }}>
+          {cards.map((f) => (
+            <div key={f.title} className="hk-consult-card" style={{ background: "var(--surface-card)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", display: "flex", flexDirection: "column", transition: "transform var(--dur-slow) var(--ease-out), box-shadow var(--dur-slow) var(--ease-out)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "none"; }}>
+              <div style={{ position: "relative" }}>
+                <img src={f.img} alt={f.alt || f.title} style={{ width: "100%", aspectRatio: "16 / 9", objectFit: "cover", objectPosition: f.pos || "50% 50%", display: "block" }} />
+                <span style={{ position: "absolute", top: "16px", left: "16px" }}><Tag tone="green" variant="solid">{f.badge}</Tag></span>
+              </div>
+              <div style={{ padding: "30px 28px 32px", display: "flex", flexDirection: "column", gap: "16px", flex: 1 }}>
+                <h3 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "24px", color: "var(--text-strong)" }}>{f.title}</h3>
+                <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.62, color: "var(--text-muted)" }}>{f.body}</p>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {f.perks.map((p) => (
+                    <li key={p} style={{ display: "flex", alignItems: "center", gap: "10px", fontFamily: "var(--font-body)", fontSize: "14px", color: "var(--text-body)" }}>
+                      <i data-lucide="check" style={{ width: 16, height: 16, color: "var(--green-700)", flexShrink: 0 }}></i>{p}
+                    </li>
+                  ))}
+                </ul>
+                <div style={{ marginTop: "auto", paddingTop: "18px", borderTop: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap" }}>
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: "13px", textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--text-faint)" }}>{footLabel}</span>
+                  <Button variant="primary" size="md" onClick={onFoot}>{footCta}</Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList, HkPlanHero, HkFormatCards });
+
+// Daily Gut Rituals (brief: "Gut Healing Habits"): new page for healthykitchen.delivery.
+// Same flow and pieces as the live Gut Healing Protocol page (page-gut-healing-extras.js):
+//   Hero ............ ProductDetail plan hero                          -> HkPlanHero
+//   Rituals ......... GutHealingGamble (statement + numbered 2-col list) -> HkStatementList
 //   A day, plated ... PlanMenu + green stat strip (GutHealingMenu)     -> HkStatBand
+//   Make it stick ... GutHealingPhases (green band, 3 panels)          -> HkGreenPanels
 //   Questions ....... FAQ (live component)
-//   Closing CTA ..... ConsultCta (green band)
-const { Button, Tag } = window.HealthyKitchenDesignSystem_f4c763;
+//   Closing CTA ..... ConsultCta-style green band (brief: link menu + catering)
+const { Button } = window.HealthyKitchenDesignSystem_f4c763;
 
 const ghhGoMenu = () => { window.location.href = window.HK_LINKS.gutMenu; };
 const ghhGoCatering = () => { window.location.href = window.HK_LINKS.catering; };
@@ -851,80 +928,46 @@ const ghhScrollTo = (id) => {
   window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
 };
 
-/* ---------- Hero ---------- */
+/* ---------- Hero (same as the plan pages) ---------- */
 function GhhHero() {
   return (
-    <section style={{ background: "var(--bg-page)" }}>
-      <div className="hk-container hk-grid-2 hk-hero-grid" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "72px 32px 64px", display: "grid", gridTemplateColumns: "0.95fr 1.05fr", gap: "56px", alignItems: "center" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
-          <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-widest)", color: "var(--text-faint)" }}>
-            Daily rituals
-          </span>
-          <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "0.02em", lineHeight: 1.02, fontSize: "clamp(36px, 5.5vw, 60px)", color: "var(--text-strong)" }}>
-            Small rituals,<br />
-            <span style={{ color: "var(--green-700)" }}>a happier gut</span>
-          </h1>
-          <p style={{ margin: 0, fontFamily: "var(--font-body)", fontSize: "18px", lineHeight: 1.6, color: "var(--text-muted)", maxWidth: "48ch" }}>
-            Seven simple habits, guided by the doctors at our partner clinic, Maison Santé. None takes more than a few minutes, and every one fits into a busy Dubai day.
-          </p>
-          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", alignItems: "center" }}>
-            <Button variant="primary" size="lg" onClick={() => ghhScrollTo("ghh-rituals")}>See the Daily Rituals</Button>
-            <Button variant="ghost" size="lg" onClick={ghhGoMenu}>Gut Healing Protocol</Button>
-          </div>
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            <Tag tone="green" variant="soft">Seven rituals</Tag>
-            <Tag tone="green" variant="soft">A few minutes each</Tag>
-            <Tag tone="green" variant="soft">Morning to evening</Tag>
-          </div>
-        </div>
-        <img src={HK_IMG("rituals-hero.jpg")} alt="A colourful Healthy Kitchen bowl with salad leaves, egg, avocado, carrot and radish" style={{ width: "100%", height: "auto", aspectRatio: "4 / 5", objectFit: "cover", borderRadius: "18px", display: "block" }} />
-      </div>
-    </section>
+    <HkPlanHero
+      eyebrow="Daily rituals · Gut health"
+      title="Daily Gut Rituals"
+      hook="Small habits that make a big difference to how your gut feels."
+      text="Seven simple rituals, guided by the doctors at our partner clinic, Maison Santé. Each one takes five minutes or less and fits easily into a busy Dubai day."
+      chip="Gut support"
+      chips={["5 minutes or less", "Morning to night"]}
+      facts={[
+        { n: "01", h: "Guided by our partner clinic", p: "Doctors and nutritionists at Maison Santé" },
+        { n: "02", h: "Seven rituals, one day", p: "From your first glass of water to lights out" },
+        { n: "03", h: "We take care of the food", p: "Gut Healing Protocol, delivered every morning" },
+      ]}
+      cta="See the Daily Rituals"
+      onCta={() => ghhScrollTo("ghh-rituals")}
+      img={HK_IMG("rituals-hero.jpg")}
+      imgAlt="Hands holding a Healthy Kitchen bowl of greens, roasted pumpkin, quinoa and pomegranate"
+      imgPos="50% 55%" />
   );
 }
 
-/* ---------- Why small habits (statement + numbered list) ---------- */
-const HK_GHH_WHY = [
-  { n: "01", icon: "repeat", h: "It's the everyday that counts", p: "What you eat, how you eat and how well you rest, repeated day after day, shapes how your gut feels." },
-  { n: "02", icon: "stethoscope", h: "Guided by our partner clinic", p: "Each ritual draws on advice from the doctors at Maison Santé, our partner clinic in Dubai." },
-  { n: "03", icon: "timer", h: "Minutes, not a full reset", p: "No strict rules and no long shopping lists. Every ritual is small enough to start today." },
-  { n: "04", icon: "sprout", h: "One at a time", p: "Choose the ritual that feels easiest, make it a habit, then add the next." },
-];
-
-function GhhWhy() {
-  return <HkStatementList top="Your gut keeps score" bottom="of the everyday" items={HK_GHH_WHY} closeTop="Small changes, made daily," closeBottom="are the ones that last" bg="var(--surface-card)" bordered />;
-}
-
-/* ---------- The daily rituals (green band, expanding panels) ---------- */
+/* ---------- The seven rituals (statement + numbered list, like "When your gut runs the show") ---------- */
 // Brief format: name, why it matters, how to do it.
-// Ritual 1 comes from Rita Aoun's video ("common doesn't always mean normal").
+// Ritual 01 comes from Rita Aoun's video ("common doesn't always mean normal").
 // The others are DRAFTS: the videos don't cover them, so they need doctor/nutritionist approval.
-const HK_GHH_MOMENTS = [
-  { n: "01", icon: "sunrise", cap: "Morning", h: "Start slowly", list: [
-    { t: "A morning check-in", why: "Going every few days is common, but common doesn't always mean normal. A change in rhythm can be your gut asking for attention.", how: "Each morning, notice how regular and comfortable you feel." },
-    { t: "Colour on the plate", why: "Different plants feed different gut bacteria, so variety matters more than any single superfood.", how: "Add one new vegetable, herb, seed or fruit to your day." },
-  ] },
-  { n: "02", icon: "utensils", cap: "Midday", h: "Eat with attention", list: [
-    { t: "Chew, then chew again", why: "Digestion starts in the mouth. Eating slowly gives your gut less work to do later.", how: "Put your fork down between bites and step away from the screen." },
-    { t: "A spoonful of something fermented", why: "Fermented foods bring live cultures to the table, and small, regular amounts are the gentlest way in.", how: "Add sauerkraut, kimchi or kefir to one meal a day." },
-  ] },
-  { n: "03", icon: "footprints", cap: "Afternoon", h: "Keep moving", list: [
-    { t: "A ten-minute walk", why: "Gentle movement after eating supports digestion and steadier afternoon energy.", how: "Take a short walk after your largest meal." },
-  ] },
-  { n: "04", icon: "moon-star", cap: "Evening", h: "Let your gut rest", list: [
-    { t: "Close the kitchen early", why: "Your gut does important work overnight, and it works best when it isn't still digesting dinner.", how: "Finish your last meal around three hours before bed." },
-    { t: "Rest and reset", why: "Poor sleep and stress show up in the gut, often as bloating or an irregular rhythm.", how: "Dim the lights, put screens away and aim for seven to eight hours." },
-  ] },
+const HK_GHH_RITUALS = [
+  { n: "01", cap: "Morning", icon: "sunrise", h: "A morning check-in", p: "Going every few days is common, but common doesn't always mean normal. A change in your rhythm can be your gut asking for attention.", how: "Each morning, notice how regular and comfortable you feel." },
+  { n: "02", cap: "Morning", icon: "carrot", h: "Colour on the plate", p: "Different plants feed different gut bacteria, so variety matters more than any single superfood.", how: "Add one new vegetable, herb, seed or fruit to your day." },
+  { n: "03", cap: "Midday", icon: "utensils", h: "Chew, then chew again", p: "Digestion starts in the mouth. Eating slowly leaves your gut less work to do later.", how: "Put your fork down between bites and step away from the screen." },
+  { n: "04", cap: "Midday", icon: "sprout", h: "Something fermented, every day", p: "Fermented foods bring live cultures to the table, and small, regular amounts are the gentlest way in.", how: "Add a spoonful of sauerkraut, kimchi or kefir to one meal." },
+  { n: "05", cap: "Afternoon", icon: "footprints", h: "A ten-minute walk", p: "Gentle movement after eating supports digestion and steadier energy through the afternoon.", how: "Take a short walk after your largest meal." },
+  { n: "06", cap: "Evening", icon: "clock-3", h: "Close the kitchen early", p: "Your gut does important work overnight, and it works best when it isn't still busy with dinner.", how: "Finish your last meal around three hours before bed." },
+  { n: "07", cap: "Night", icon: "moon-star", h: "Rest and reset", p: "Poor sleep and stress show up in the gut, often as bloating or an irregular rhythm.", how: "Dim the lights, put screens away and aim for seven to eight hours." },
 ];
 
 function GhhRituals() {
-  return (
-    <HkGreenPanels id="ghh-rituals" watermark="rituals" label="The daily rituals"
-      eyebrow="The daily rituals" titleTop="From first light" titleBottom="to lights out"
-      intro="Seven rituals across four moments of the day. Choose a moment to see what to do, and why it helps."
-      items={HK_GHH_MOMENTS}
-      note="These rituals are general wellbeing guidance, not medical advice. If bloating or an irregular rhythm continues, stop guessing: a consultation with our partner clinic can look at the cause." />
-  );
+  return <HkStatementList id="ghh-rituals" top="Seven daily rituals" bottom="for a happier gut" items={HK_GHH_RITUALS}
+    closeTop="Small changes, made every day," closeBottom="are the ones your gut feels most" />;
 }
 
 /* ---------- A gut-friendly day, plated (PlanMenu + stat strip) ---------- */
@@ -942,10 +985,10 @@ function GhhDay() {
   usePlanMenuEyebrow("Rituals, made easier");
   return (
     <>
-      <PlanMenu menus={HK_GHH_DAY} title="A gut-friendly day, plated" showTotal={false} showMacros={false} sub="Rituals are easier when the cooking is done for you. Here's a sample day from our kitchen, delivered fresh across Dubai." />
+      <PlanMenu menus={HK_GHH_DAY} title="A gut-friendly day, plated" showTotal={false} showMacros={false} sub="The rituals are easier when the cooking is done for you. Here's a sample day from our kitchen, delivered fresh across Dubai." />
       <HkStatBand stats={[
         { val: "7", label: "Daily rituals" },
-        { val: "5 min", label: "Or less for most" },
+        { val: "5 min", label: "Or less for each one" },
         { val: "1×", label: "Fermented food a day" },
         { val: "3 h", label: "Between dinner and bed" },
       ]} />
@@ -953,10 +996,27 @@ function GhhDay() {
   );
 }
 
+/* ---------- Making them stick (green band, 3 panels like "How the healing actually happens") ---------- */
+const HK_GHH_STICK = [
+  { n: "01", icon: "flag", cap: "Begin", h: "Start with one", p: "Pick the ritual that feels easiest and keep it for two weeks before you add the next." },
+  { n: "02", icon: "link", cap: "Anchor", h: "Pair it with a habit", p: "Tie each ritual to something you already do: water while the kettle boils, a walk after lunch." },
+  { n: "03", icon: "soup", cap: "Ease", h: "Let us do the cooking", p: "Our Gut Healing Protocol brings fermented foods and fibre to your door every morning." },
+];
+
+function GhhStick() {
+  return (
+    <HkGreenPanels id="ghh-stick" watermark="rituals" label="How to make the rituals stick"
+      eyebrow="Make it last" titleTop="Rituals that" titleBottom="actually stick"
+      intro="A ritual only helps if you keep it. Three simple steps turn these habits into part of your day."
+      items={HK_GHH_STICK}
+      note="These rituals are general wellbeing guidance, not medical advice. If bloating or an irregular rhythm continues, stop guessing: a consultation with our partner clinic can look at the cause." />
+  );
+}
+
 /* ---------- Questions & Answers (live FAQ component) ---------- */
 const HK_GHH_FAQ = [
   { q: "Do I need to follow all seven rituals?", a: "No. Start with the one that feels easiest. Once it has become a habit, add the next. Small steps you keep are worth more than a big change you drop." },
-  { q: "Where does the advice come from?", a: "The rituals draw on advice from the doctors at Maison Santé, our partner clinic in Dubai, and are written by our nutrition team." },
+  { q: "Where does the advice come from?", a: "The rituals draw on advice from the doctors at Maison Santé, our partner clinic in Dubai, and are written with our nutrition team." },
   { q: "Is this medical advice?", a: "No. These are general wellbeing habits. If you have a diagnosed condition or ongoing symptoms, speak to your doctor before changing your routine." },
   { q: "How does Healthy Kitchen fit in?", a: "Our Gut Healing Protocol takes care of the food: chef-made, gut-friendly meals delivered fresh across Dubai every morning, so the rituals are all you need to think about." },
   { q: "Can I speak to a doctor about my gut health?", a: "Yes. You can book a consultation with the doctors at our partner clinic, online or in person, from our Consultations page." },
@@ -972,7 +1032,7 @@ function GhhCta() {
     <section style={{ position: "relative", overflow: "hidden", background: "var(--green-700)", color: "var(--ivory-50)" }}>
       <span aria-hidden="true" className="hk-watermark" style={{ position: "absolute", left: "-24px", bottom: "-40px", fontFamily: "var(--font-script)", fontSize: "200px", lineHeight: 1, color: "rgba(253,252,248,0.05)", pointerEvents: "none", userSelect: "none" }}>nourish</span>
       <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "88px 32px", display: "flex", flexDirection: "column", alignItems: "center", gap: "24px", textAlign: "center", position: "relative" }}>
-        <span style={{ fontFamily: "var(--font-script)", fontSize: "clamp(28px, 4vw, 40px)", color: "var(--green-200)", lineHeight: 1 }}>let us do the cooking</span>
+        <span style={{ fontFamily: "var(--font-script)", fontSize: "clamp(28px, 4vw, 40px)", color: "var(--green-200)", lineHeight: 1 }}>Let us do the cooking</span>
         <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontWeight: 400, letterSpacing: "var(--tracking-wide)", fontSize: "clamp(30px, 5vw, 48px)", lineHeight: "var(--leading-tight)", color: "var(--ivory-50)", maxWidth: "22ch" }}>
           Gut-friendly food, delivered every morning
         </h2>
@@ -991,9 +1051,9 @@ function GutHealingHabits() {
   return (
     <>
       <GhhHero />
-      <GhhWhy />
       <GhhRituals />
       <GhhDay />
+      <GhhStick />
       <GhhFAQ />
       <GhhCta />
     </>
@@ -1038,7 +1098,7 @@ function ProtoApp() {
       <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
       <main><GutHealingHabits /></main>
       <Footer onNav={handleNav} onHome={() => go("/")} />
-      <ProtoNotes notes={["Rana / Irina to approve naming Maison Santé as “our partner clinic”. Nothing on the page says Healthy Kitchen has its own doctors.","The “Advice from Maison Santé” section is removed for now. It can come back once quotes and names are approved by Maison Santé.","Rituals follow the brief's format: name, why it matters, how to do it. Only the morning check-in comes from the doctors' videos (Rita Aoun: “common doesn't always mean normal”), and the closing note uses Maison Santé's “stop guessing” message. The other six aren't in the three videos we have, so the brief needs them approved by Dr Maria Alonso, Rita Aoun and Natalia Belaiche, or replaced with tips from more videos.","The brief's “Doctor's voice” section (2–3 named tips) is left out as requested. It can come back once the quotes and names are approved.","Page follows the same flow as the live plan pages (statement, green rituals band, day of meals with stat strip, Questions & Answers). Hero and daily-plan photos are from Anna's 31 Oct shoot. Dish names in the daily plan need confirming with the kitchen.","The page name contains “Healing”. The brief asks for medical sign-off on that word.","Review order: Irina first, then Lyudmila if available, then Natalia."]} />
+      <ProtoNotes notes={["Layout now copies the live Gut Healing Protocol page section for section: plan-page hero, numbered list, day-of-meals carousel with green stat strip, green three-card band, Questions & Answers.","Hero photo (Natalia: colourful bowl with greens): hands holding a greens, pumpkin and quinoa bowl from Anna's 31 Oct shoot, framed like the live Gut Healing hero.","Rituals follow the brief's format (name, why it matters, how). Only the morning check-in comes from the doctors' videos (Rita Aoun: “common doesn't always mean normal”); the closing note uses Maison Santé's “stop guessing” message. The other six need approval from Dr Maria Alonso, Rita Aoun and Natalia Belaiche, or replacing with tips from more videos.","Rana / Irina to approve naming Maison Santé as “our partner clinic”. Nothing on the page says Healthy Kitchen has its own doctors. The brief's named “Doctor's voice” tips are left out until names and quotes are approved.","Page title on screen is “Daily Gut Rituals” to avoid “heal” (brief rule). The brief's working name “Gut Healing Habits” and the page URL need the medical lead's sign-off.","Daily-plan dish names need confirming with the kitchen.","Review order: Irina first, then Lyudmila if available, then Natalia."]} />
     </>
   );
 }
