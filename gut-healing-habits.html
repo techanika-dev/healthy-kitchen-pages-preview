@@ -1159,7 +1159,7 @@ function GhhCta() {
         </h2>
         <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
           <Button variant="inverse" size="lg" onClick={ghhGoMenu}>Gut Healing Protocol</Button>
-          <Button variant="ghost" size="lg" style={{ borderColor: "rgba(253,252,248,0.5)", color: "var(--ivory-50)" }} onClick={ghhGoCatering}>Gut Smart Catering</Button>
+          {window.HK_LINKS.catering && <Button variant="ghost" size="lg" style={{ borderColor: "rgba(253,252,248,0.5)", color: "var(--ivory-50)" }} onClick={ghhGoCatering}>Gut Smart Catering</Button>}
         </div>
       </div>
     </section>
