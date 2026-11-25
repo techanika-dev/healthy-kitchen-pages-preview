@@ -823,7 +823,24 @@ function HkPlanHero({ eyebrow, title, hook, text, chip, chips, facts, cta, onCta
   React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
   const pill = (bg, fg) => ({ display: "inline-flex", alignItems: "center", fontSize: "11px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.12em", background: bg, color: fg, borderRadius: "var(--radius-pill)", padding: "5px 11px" });
   return (
-    <section style={{ background: "var(--bg-page)" }}>
+    <section className="hk-ph" style={{ background: "var(--bg-page)" }}>
+      {/* Tablet: keep the photo beside the text. Phone: a shorter photo above the title.
+          Also keeps the Reviews cards three to a row on tablet (no lone third card). */}
+      <style>{`
+        @media (min-width: 761px) and (max-width: 1024px) {
+          .hk-ph .hk-grid-2 { grid-template-columns: 1fr 1fr !important; gap: 32px !important; }
+          .hk-ph .hk-plan-title { white-space: normal !important; }
+          .hk-ph .hk-ph-photo > div { min-height: 420px !important; }
+        }
+        @media (max-width: 760px) {
+          .hk-ph .hk-ph-photo { order: -1; }
+          .hk-ph .hk-ph-photo > div { min-height: 0 !important; height: 240px; flex: none !important; }
+        }
+        @media (min-width: 641px) and (max-width: 1024px) {
+          .hk-rev3 .hk-grid-3 { grid-template-columns: repeat(3, 1fr) !important; gap: 16px !important; }
+          .hk-rev3 figure { padding: 22px !important; }
+        }
+      `}</style>
       <div className="hk-container hk-plan-hero" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "40px 32px 56px" }}>
         <div className="hk-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "56px", alignItems: "start" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
@@ -852,7 +869,7 @@ function HkPlanHero({ eyebrow, title, hook, text, chip, chips, facts, cta, onCta
               <i data-lucide="arrow-down" style={{ width: 17, height: 17 }}></i> {cta}
             </button>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", alignSelf: "stretch" }}>
+          <div className="hk-ph-photo" style={{ display: "flex", flexDirection: "column", alignSelf: "stretch" }}>
             <div style={{ position: "relative", width: "100%", flex: "1 1 auto", minHeight: "520px", borderRadius: "18px", overflow: "hidden" }}>
               <img src={img} alt={imgAlt} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: imgPos || "50% 50%", display: "block" }} />
             </div>
@@ -981,7 +998,8 @@ function HkMenu({ menus, eyebrow, title, sub, inset }) {
 Object.assign(window, { HkMenu, usePlanMenuEyebrow, HkStatBand, HkGreenPanels, HkStatementList, HkPlanHero, HkFormatCards });
 
 // Daily Gut Rituals (brief: "Gut Healing Habits"): new page for healthykitchen.delivery.
-// Same flow and pieces as the live Gut Healing Protocol page (page-gut-healing-extras.js):
+// Same flow and pieces as the live Gut Healing Protocol page (page-gut-healing-extras.js).
+// Rituals: the eight habits from the Maison Santé "Habits for a healthy gut" card.
 //   Hero ............ ProductDetail plan hero                          -> HkPlanHero
 //   Rituals ......... GutHealingGamble (statement + numbered 2-col list) -> HkStatementList
 //   A day, plated ... PlanMenu + green stat strip (GutHealingMenu)     -> HkStatBand
@@ -1008,12 +1026,12 @@ function GhhHero() {
       eyebrow="Daily rituals · Gut health"
       title="Daily Gut Rituals"
       hook="Small habits that make a big difference to how your gut feels."
-      text="Seven simple rituals, guided by the doctors at our partner clinic, Maison Santé. Each one takes five minutes or less and fits easily into a busy Dubai day."
+      text="Eight simple rituals from the doctors and nutritionists at our partner clinic, Maison Santé. Most take a minute or two and fit easily into a busy Dubai day."
       chip="Gut support"
-      chips={["5 minutes or less", "Morning to night"]}
+      chips={["Easy to start", "Morning to night"]}
       facts={[
         { n: "01", h: "Guided by our partner clinic", p: "Doctors and nutritionists at Maison Santé" },
-        { n: "02", h: "Seven rituals, one day", p: "From your first glass of water to lights out" },
+        { n: "02", h: "Eight rituals, one day", p: "From a glass of warm water to lights out" },
         { n: "03", h: "We take care of the food", p: "Gut Healing Protocol, delivered every morning" },
       ]}
       cta="See the Daily Rituals"
@@ -1024,18 +1042,18 @@ function GhhHero() {
   );
 }
 
-/* ---------- The seven rituals (statement + numbered list, like "When your gut runs the show") ---------- */
-// Brief format: name, why it matters, how to do it.
-// Ritual 01 comes from Rita Aoun's video ("common doesn't always mean normal").
-// The others are DRAFTS: the videos don't cover them, so they need doctor/nutritionist approval.
+/* ---------- The eight rituals ---------- */
+// All eight come from the Maison Santé "Habits for a healthy gut" business card
+// (the yearly probiotics course is in the FAQ, as it isn't a daily ritual).
 const HK_GHH_RITUALS = [
-  { n: "01", cap: "Morning", icon: "sunrise", h: "A morning check-in", p: "Going every few days is common, but common doesn't always mean normal. A change in your rhythm can be your gut asking for attention.", how: "Each morning, notice how regular and comfortable you feel." },
-  { n: "02", cap: "Morning", icon: "carrot", h: "Colour on the plate", p: "Different plants feed different gut bacteria, so variety matters more than any single superfood.", how: "Add one new vegetable, herb, seed or fruit to your day." },
-  { n: "03", cap: "Midday", icon: "utensils", h: "Chew, then chew again", p: "Digestion starts in the mouth. Eating slowly leaves your gut less work to do later.", how: "Put your fork down between bites and step away from the screen." },
-  { n: "04", cap: "Midday", icon: "sprout", h: "Something fermented, every day", p: "Fermented foods bring live cultures to the table, and small, regular amounts are the gentlest way in.", how: "Add a spoonful of sauerkraut, kimchi or kefir to one meal." },
-  { n: "05", cap: "Afternoon", icon: "footprints", h: "A ten-minute walk", p: "Gentle movement after eating supports digestion and steadier energy through the afternoon.", how: "Take a short walk after your largest meal." },
-  { n: "06", cap: "Evening", icon: "clock-3", h: "Close the kitchen early", p: "Your gut does important work overnight, and it works best when it isn't still busy with dinner.", how: "Finish your last meal around three hours before bed." },
-  { n: "07", cap: "Night", icon: "moon-star", h: "Rest and reset", p: "Poor sleep and stress show up in the gut, often as bloating or an irregular rhythm.", how: "Dim the lights, put screens away and aim for seven to eight hours." },
+  { n: "01", cap: "Morning", icon: "sunrise", h: "Warm water, then a check-in", p: "A glass of warm water on waking gently gets digestion moving. It's also a good moment to notice your rhythm: a bowel movement only every few days is common, but common doesn't always mean normal.", how: "Drink a glass of warm water before breakfast, then notice how regular and comfortable you feel." },
+  { n: "02", cap: "Every meal", icon: "utensils", h: "Chew each bite 30 times", p: "Digestion starts in the mouth. Well-chewed food leaves your gut far less work, and eating slowly helps you notice when you've had enough.", how: "Count to 30 for each bite, put your fork down in between, and stop when you feel about 80% full." },
+  { n: "03", cap: "Every meal", icon: "leaf", h: "Bitter greens and papaya", p: "Bitter foods help your body release bile and digestive juices, and papaya brings natural enzymes that ease digestion.", how: "Start lunch or dinner with a handful of rocket (arugula), and add papaya to breakfast or a snack." },
+  { n: "04", cap: "Every meal", icon: "sprout", h: "Fibre and fermented foods", p: "Fibre from a wide mix of plants feeds your good gut bacteria, and fermented foods bring live cultures. Small amounts at every meal work better than one big dose.", how: "Add a spoonful of sauerkraut, kimchi or coconut yogurt and a sprinkle of flax or chia seeds to each meal." },
+  { n: "05", cap: "Every meal", icon: "smartphone", h: "No drinks, no screens", p: "Large drinks with food dilute your digestive juices, and a busy screen keeps your body out of rest-and-digest mode.", how: "Drink water between meals rather than with them, and keep your phone away from the table." },
+  { n: "06", cap: "Afternoon", icon: "footprints", h: "A ten-minute walk", p: "Gentle movement after eating supports digestion and steadier energy through the afternoon.", how: "Take a short walk after your largest meal." },
+  { n: "07", cap: "Evening", icon: "clock-3", h: "Close the kitchen early", p: "Your gut does important work overnight, and it works best when it isn't still busy with dinner. Raw food is also harder to digest late in the day.", how: "Choose cooked rather than raw food in the evening, and finish your last meal at least two hours before bed." },
+  { n: "08", cap: "Night", icon: "moon-star", h: "Rest and reset", p: "Poor sleep and stress show up in the gut, often as bloating or an irregular rhythm.", how: "Dim the lights, put screens away and aim for seven to eight hours." },
 ];
 
 function GhhRituals() {
@@ -1045,11 +1063,11 @@ function GhhRituals() {
       <div className="hk-container" style={{ maxWidth: "var(--container-max)", margin: "0 auto", padding: "72px 32px 80px" }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px", textAlign: "center", marginBottom: "44px" }}>
           <h2 className="hk-statement" style={{ margin: 0, fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 600, lineHeight: 1.08, fontSize: "clamp(28px, 3.4vw, 40px)" }}>
-            <span style={{ color: "var(--text-strong)" }}>Seven daily rituals </span>
+            <span style={{ color: "var(--text-strong)" }}>Eight daily rituals </span>
             <span style={{ color: "var(--green-700)", fontStyle: "italic" }}>for a happier gut</span>
           </h2>
           <p style={{ margin: 0, fontSize: "16px", lineHeight: 1.6, color: "var(--text-muted)", maxWidth: "62ch" }}>
-            How your gut feels is shaped less by one big change than by what you repeat every day. These small rituals take minutes, need no special shopping, and add up over time.
+            How your gut feels is shaped less by one big change than by what you repeat every day. These small rituals take minutes, need no special equipment, and add up over time.
           </p>
         </div>
         <div className="hk-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "28px 24px" }}>
@@ -1066,13 +1084,6 @@ function GhhRituals() {
               <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.5, color: "var(--text-body)" }}><span style={{ fontSize: "10.5px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.12em", background: "var(--green-100)", color: "var(--green-800)", borderRadius: "var(--radius-pill)", padding: "3px 8px", marginRight: "8px" }}>How</span>{it.how}</p>
             </div>
           ))}
-          <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "14px", background: "var(--green-700)", color: "var(--ivory-50)", borderRadius: "var(--radius-lg)", padding: "22px" }}>
-            <span style={{ fontFamily: "var(--font-script)", fontSize: "30px", lineHeight: 1, color: "var(--green-200)" }}>Start with one</span>
-            <p style={{ margin: 0, fontSize: "14px", lineHeight: 1.55, color: "var(--green-100)" }}>Pick the easiest ritual and keep it for two weeks. Let us take care of the food in the meantime.</p>
-            <button onClick={ghhGoMenu} style={{ alignSelf: "flex-start", background: "none", border: 0, padding: 0, cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "13px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--ivory-50)", display: "inline-flex", alignItems: "center", gap: "6px" }}>
-              Gut Healing Protocol <i data-lucide="arrow-right" style={{ width: 14, height: 14 }}></i>
-            </button>
-          </div>
         </div>
       </div>
     </section>
@@ -1087,7 +1098,7 @@ const HK_GHH_DAY = [
     { meal: "Breakfast", img: "assets/meals/gut-breakfast.jpg", title: "Zucchini pancakes with salmon & coconut yogurt", desc: "Rich in omega-3 for anti-inflammatory support. Gentle on digestion, with natural probiotics.", kcal: 364, p: 22, c: 24, f: 20 },
     { meal: "Lunch", img: "assets/meals/gut-lunch.jpg", title: "Pharmacy bowl", desc: "Fermented foods for gut flora, plus fiber from greens, seeds and avocado to boost nutrient absorption.", kcal: 533, p: 41, c: 36, f: 25 },
     { meal: "Dinner", img: "assets/meals/gut-dinner.jpg", title: "Konjac pasta bolognese", desc: "Low-carb and light on digestion, with prebiotics for microbiome health. An easy, soothing evening meal.", kcal: 434, p: 44, c: 15, f: 22 },
-    { meal: "Snack", img: "assets/meals/gut-snack.jpg", title: "Hazelnut cake", desc: "No sugar, no flour, only whole foods. Rich in magnesium for a calming effect and stable blood sugar.", kcal: 278, p: 8, c: 21, f: 18 },
+    { meal: "Snack", img: "assets/meals/gut-snack.jpg", title: "Hazelnut cake", desc: "No refined sugar, no flour, only whole foods. Rich in magnesium for a calming effect and stable blood sugar.", kcal: 278, p: 8, c: 21, f: 18 },
   ] },
 ];
 
@@ -1096,10 +1107,10 @@ function GhhDay() {
     <>
       <HkMenu menus={HK_GHH_DAY} eyebrow="Rituals, made easier" title="A gut-friendly day, plated" sub="The rituals are easier when the cooking is done for you. Here's a day on our Gut Healing Protocol, delivered fresh across Dubai." />
       <HkStatBand stats={[
-        { val: "7", label: "Daily rituals" },
-        { val: "5 min", label: "Or less for each one" },
-        { val: "1×", label: "Fermented food a day" },
-        { val: "3 h", label: "Between dinner and bed" },
+        { val: "8", label: "Daily rituals" },
+        { val: "30", label: "Chews per bite" },
+        { val: "80%", label: "Full, then stop" },
+        { val: "2 h", label: "Between dinner and bed" },
       ]} />
     </>
   );
@@ -1118,15 +1129,16 @@ function GhhStick() {
       eyebrow="Make it last" titleTop="Rituals that" titleBottom="actually stick"
       intro="A ritual only helps if you keep it. Three simple steps turn these habits into part of your day."
       items={HK_GHH_STICK}
-      note="These rituals are general wellbeing guidance, not medical advice. If bloating or an irregular rhythm continues, stop guessing: a consultation with our partner clinic can look at the cause." />
+      note={<>These rituals are general wellbeing guidance, not medical advice. If bloating or an irregular rhythm continues, stop guessing: <a href="https://maisonsante.ae" target="_blank" rel="noopener noreferrer" style={{ color: "var(--ivory-50)", textDecoration: "underline", textUnderlineOffset: "3px" }}>a consultation with our partner clinic</a> can look at the cause.</>} />
   );
 }
 
 /* ---------- Questions & Answers (live FAQ component) ---------- */
 const HK_GHH_FAQ = [
-  { q: "Do I need to follow all seven rituals?", a: "No. Start with the one that feels easiest. Once it has become a habit, add the next. Small steps you keep are worth more than a big change you drop." },
-  { q: "Where does the advice come from?", a: "The rituals draw on advice from the doctors at Maison Santé, our partner clinic in Dubai, and are written with our nutrition team." },
+  { q: "Do I need to follow all eight rituals?", a: "No. Start with the one that feels easiest. Once it has become a habit, add the next. Small steps you keep are worth more than a big change you drop." },
+  { q: "Where does the advice come from?", a: "The rituals come from the doctors and nutritionists at Maison Santé, our partner clinic in Dubai." },
   { q: "Is this medical advice?", a: "No. These are general wellbeing habits. If you have a diagnosed condition or ongoing symptoms, speak to your doctor before changing your routine." },
+  { q: "Should I take probiotics?", a: "Our partner clinic suggests a course of good-quality probiotics once a year. The right one depends on you, so ask the Maison Santé team before you start." },
   { q: "How does Healthy Kitchen fit in?", a: "Our Gut Healing Protocol takes care of the food: chef-made, gut-friendly meals delivered fresh across Dubai every morning, so the rituals are all you need to think about." },
   { q: "Can I speak to a doctor about my gut health?", a: "Yes. You can book a consultation with the doctors at our partner clinic, online or in person, from our Consultations page." },
 ];
@@ -1163,7 +1175,7 @@ function GutHealingHabits() {
       <GhhRituals />
       <GhhDay />
       <GhhStick />
-      <Reviews />
+      <div className="hk-rev3"><Reviews /></div>
       <GhhFAQ />
       <GhhCta />
     </>
@@ -1208,7 +1220,7 @@ function ProtoApp() {
       <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
       <main><GutHealingHabits /></main>
       <Footer onNav={handleNav} onHome={() => go("/")} />
-      <ProtoNotes notes={["Layout now copies the live Gut Healing Protocol page section for section: plan-page hero, numbered list, day-of-meals carousel with green stat strip, green three-card band, Questions & Answers.","Hero photo (Natalia: colourful bowl with greens): hands holding a greens, pumpkin and quinoa bowl from Anna's 31 Oct shoot, framed like the live Gut Healing hero.","Rituals follow the brief's format (name, why it matters, how). Only the morning check-in comes from the doctors' videos (Rita Aoun: “common doesn't always mean normal”); the closing note uses Maison Santé's “stop guessing” message. The other six need approval from Dr Maria Alonso, Rita Aoun and Natalia Belaiche, or replacing with tips from more videos.","Rana / Irina to approve naming Maison Santé as “our partner clinic”. Nothing on the page says Healthy Kitchen has its own doctors. The brief's named “Doctor's voice” tips are left out until names and quotes are approved.","Page title on screen is “Daily Gut Rituals” to avoid “heal” (brief rule). The brief's working name “Gut Healing Habits” and the page URL need the medical lead's sign-off.","The meal carousel now shows the live Gut Healing Protocol sample day, so every card has real photos, kcal and macros (same as that page).","Reviews section uses the live site's existing customer reviews (Healthy Kitchen in general, not about rituals).","Review order: Irina first, then Lyudmila if available, then Natalia."]} />
+      <ProtoNotes notes={["Layout now copies the live Gut Healing Protocol page section for section: plan-page hero, numbered list, day-of-meals carousel with green stat strip, green three-card band, Questions & Answers.","Hero photo (Natalia: colourful bowl with greens): hands holding a greens, pumpkin and quinoa bowl from Anna's 31 Oct shoot, framed like the live Gut Healing hero.","Rituals are the eight habits from the Maison Santé “Habits for a healthy gut” card (per the 25 Nov change list). The yearly probiotics course is in the FAQ. Wording still needs sign-off from Dr Maria Alonso, Rita Aoun and Natalia Belaiche.","Rana / Irina to approve naming Maison Santé as “our partner clinic”. Nothing on the page says Healthy Kitchen has its own doctors. The brief's named “Doctor's voice” tips are left out until names and quotes are approved.","Page title on screen is “Daily Gut Rituals” to avoid “heal” (brief rule). The brief's working name “Gut Healing Habits” and the page URL need the medical lead's sign-off.","The meal carousel now shows the live Gut Healing Protocol sample day, so every card has real photos, kcal and macros (same as that page).","Reviews section uses the live site's existing customer reviews (Healthy Kitchen in general, not about rituals).","Review order: Irina first, then Lyudmila if available, then Natalia."]} />
     </>
   );
 }
