@@ -1117,10 +1117,8 @@ function CatServe() {
         <div className="hk-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px", marginTop: "56px" }}>
           {HK_CAT_SERVED.map((m) => (
             <div key={m.title} style={{ display: "flex", flexDirection: "column", background: "var(--bg-page)", border: "1px solid var(--border-subtle)", borderRadius: "var(--radius-lg)", overflow: "hidden", boxShadow: "var(--shadow-xs)" }}>
-              <div style={{ aspectRatio: m.ratio, padding: "14px 14px 0", display: "flex" }}>
-                <div style={{ position: "relative", flex: 1, borderRadius: "12px", overflow: "hidden", background: "var(--ivory-100)" }}>
-                  <img src={HK_IMG(m.img)} alt={m.title} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-                </div>
+              <div style={{ position: "relative", aspectRatio: m.ratio, background: "var(--ivory-100)" }}>
+                <img src={HK_IMG(m.img)} alt={m.title} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "22px" }}>
                 <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-600)" }}>{m.kind}</span>
@@ -1141,10 +1139,10 @@ function CatServe() {
 const HK_CAT_MENU = [
   { label: "Finger Foods", meals: [
     { meal: "Finger food", title: "GF Mini Zucchini Pancakes with Salmon", img: HK_IMG("dish-zucchini-pancakes.jpg"), desc: "Small gluten-free pancakes, easy to eat while you mingle.", kcal: 364, p: 22, c: 24, f: 20 },
-    { meal: "Finger food", title: "GF Mini Waffles with Salmon & Guacamole", img: HK_IMG("dish-mini-waffles.jpg"), desc: "Gluten-free waffles with smoked salmon and guacamole.", kcal: 409, p: 18, c: 28, f: 25 },
+    { meal: "Finger food", title: "GF Mini Waffles with Salmon & Guacamole", img: "assets/meals/aip-breakfast.jpg", desc: "Gluten-free waffles with smoked salmon and guacamole.", kcal: 409, p: 18, c: 28, f: 25 },
     { meal: "Finger food", title: "Chia Pudding with Mango", desc: "Served in small individual jars." },
     { meal: "Finger food", title: "Cacao Nut Balls", img: HK_IMG("dish-cacao-balls.jpg"), desc: "A sugar-free sweet bite." },
-    { meal: "Finger food", title: "Coconut Mini Balls", img: HK_IMG("dish-coconut-balls.jpg"), desc: "A sugar-free sweet bite.", kcal: 232, p: 3.9, c: 17, f: 15 },
+    { meal: "Finger food", title: "Coconut Mini Balls", img: "assets/meals/mu-low-snack-1.jpg", desc: "A sugar-free sweet bite.", kcal: 232, p: 3.9, c: 17, f: 15 },
     { meal: "Finger food", title: "Keto Brownie Bites", img: HK_IMG("dish-brownie-bites.jpg"), desc: "Rich, sugar-free brownie in small squares." },
   ] },
   { label: "Mains", meals: [
@@ -1169,7 +1167,7 @@ const HK_CAT_MENU = [
 function CatMenu() {
   return (
     <>
-      <HkMenu inset menus={HK_CAT_MENU} eyebrow="Menu preview" title="A taste of the menu" sub="Finger food, mains and drinks, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
+      <HkMenu menus={HK_CAT_MENU} eyebrow="Menu preview" title="A taste of the menu" sub="Finger food, mains and drinks, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
       <HkStatBand stats={[
         { val: "100%", label: "Gluten-free" },
         { val: "0g", label: "Added sugar" },
@@ -1363,7 +1361,7 @@ function ProtoApp() {
       <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
       <main><Catering /></main>
       <Footer onNav={handleNav} onHome={() => go("/")} />
-      <ProtoNotes notes={["Layout now copies live pages: plan-page hero, numbered differentiators, two-column occasion cards with 16:9 photos (as on Consultations), the live menu carousel with 4:3 photos, green three-card band, Questions & Answers.","“Fully gluten-free” and “sugar-free” are Natalia's words. Irina's brief says not to claim this unless every dish is verified, so Irina must confirm before publishing. Anti-Candida is left out on purpose (Natalia).","New photos from the 31 Oct shoot: hero (overhead table of dishes) and Corporate Events (long table of varied dishes). Private gathering and special occasion are earlier HK shoots; Wellness Retreats is an HK yoga shot, not a real retreat. Ask Natalia/Irina for her book and past-event photos.","New menu photos from the Yandex archive: mini waffles with salmon & guacamole (Oct 2024 shoot) and kale beetroot quinoa salad (Dec 2024 phone shot; no chicken in the photo). From the live site: Microbiome Bowl (the live “Pharmacy bowl” photo, which the brief suggests renaming), konjac pasta (live photo shows salmon, not chicken) and the drinks. Irina to confirm each matches the catering version.","Top-down finger-food photos are turned sideways to fit the site's 4:3 cards without zooming in. The brownie photo is a close-up; a wider shot would be better.","Searched all 2,147 Yandex photos and the 31 Oct shoot. Still no photo of: chia pudding with mango (only a berry chia jar exists), turkey stroganoff, Blue Zones bowl, Healthy Caesar, Longevity salad, and catering salads in jars. Ask Irina.","Drinks list is a sample from the live plans; confirm the catering drinks. Stat strip and FAQ answers need Irina's confirmation. Page name “Gut Smart Catering” still to confirm.","Reviews section uses the live site's existing Healthy Kitchen customer reviews. The brief asks for real catering reviews only, so swap these for catering reviews when Irina has them, or hide the section.","Kcal and macros come from the live site where it's the same dish, at the full plan portion size; catering portions may differ. “–” means no nutrition data yet: kitchen to supply.","Menu and “served” photos sit inside the card with a margin, so the food has space around it (Natalia). The enquiry form sends nothing."]} />
+      <ProtoNotes notes={["Layout now copies live pages: plan-page hero, numbered differentiators, two-column occasion cards with 16:9 photos (as on Consultations), the live menu carousel with 4:3 photos, green three-card band, Questions & Answers.","“Fully gluten-free” and “sugar-free” are Natalia's words. Irina's brief says not to claim this unless every dish is verified, so Irina must confirm before publishing. Anti-Candida is left out on purpose (Natalia).","New photos from the 31 Oct shoot: hero (overhead table of dishes) and Corporate Events (long table of varied dishes). Private gathering and special occasion are earlier HK shoots; Wellness Retreats is an HK yoga shot, not a real retreat. Ask Natalia/Irina for her book and past-event photos.","New menu photo from the Yandex archive: kale beetroot quinoa salad (Dec 2024 phone shot; no chicken in the photo). From the live site: Microbiome Bowl (the live “Pharmacy bowl” photo, which the brief suggests renaming), konjac pasta (live photo shows salmon, not chicken) and the drinks. Irina to confirm each matches the catering version.","Top-down finger-food photos are turned sideways to fit the site's 4:3 cards without zooming in. The brownie photo is a close-up; a wider shot would be better.","Searched all 2,147 Yandex photos and the 31 Oct shoot. Still no photo of: chia pudding with mango (only a berry chia jar exists), turkey stroganoff, Blue Zones bowl, Healthy Caesar, Longevity salad, and catering salads in jars. Ask Irina.","Drinks list is a sample from the live plans; confirm the catering drinks. Stat strip and FAQ answers need Irina's confirmation. Page name “Gut Smart Catering” still to confirm.","Reviews section uses the live site's existing Healthy Kitchen customer reviews. The brief asks for real catering reviews only, so swap these for catering reviews when Irina has them, or hide the section.","Kcal and macros come from the live site where it's the same dish, at the full plan portion size; catering portions may differ. “–” means no nutrition data yet: kitchen to supply.","Menu cards are now the same size as the live site (298×224 photos, no inner margin). Mini waffles and coconut balls use the live site's own photos of those dishes. Zucchini pancakes and cacao balls are zoomed out with the background extended. Brownie bites and kale beetroot salad are close-ups with food touching the edges: Irina to supply wider shots. The enquiry form sends nothing."]} />
     </>
   );
 }
