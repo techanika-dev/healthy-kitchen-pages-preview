@@ -925,7 +925,7 @@ function HkFormatCards({ eyebrow, title, cards, footLabel, footCta, onFoot }) {
 // Meal carousel: same markup and sizes as the live PlanMenu (300px cards, 4:3 photo, macro row),
 // with a page-specific eyebrow. Missing nutrition shows "–" instead of a made-up number.
 // inset: photo sits inside the card with a margin, so food has breathing space (Natalia).
-function HkMenu({ menus, eyebrow, title, sub, inset }) {
+function HkMenu({ menus, eyebrow, title, sub, inset, macros = true }) {
   const [idx, setIdx] = React.useState(0);
   const scrollRef = React.useRef(null);
   React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); if (scrollRef.current) scrollRef.current.scrollLeft = 0; }, [idx]);
@@ -965,6 +965,7 @@ function HkMenu({ menus, eyebrow, title, sub, inset }) {
             ))}
           </div>
         )}
+        {menu.note && <p style={{ margin: "-12px 0 24px", fontFamily: "var(--font-body)", fontSize: "15px", lineHeight: 1.55, color: "var(--text-muted)", maxWidth: "64ch" }}>{menu.note}</p>}
         <div style={{ position: "relative", margin: "0 8px" }}>
           <button type="button" onClick={() => scrollBy(-1)} aria-label="Scroll left" style={arrowStyle("left")}><i data-lucide="chevron-left" style={{ width: 18, height: 18 }}></i></button>
           <button type="button" onClick={() => scrollBy(1)} aria-label="Scroll right" style={arrowStyle("right")}><i data-lucide="chevron-right" style={{ width: 18, height: 18 }}></i></button>
@@ -982,9 +983,11 @@ function HkMenu({ menus, eyebrow, title, sub, inset }) {
                   <span style={{ fontFamily: "var(--font-body)", fontSize: "12px", fontWeight: 500, textTransform: "uppercase", letterSpacing: "var(--tracking-wide)", color: "var(--green-600)" }}>{m.meal}</span>
                   <h3 style={{ margin: 0, minHeight: "calc(20px * 1.15 * 2)", fontFamily: "var(--font-display)", letterSpacing: "var(--tracking-wide)", fontWeight: 400, fontSize: "20px", lineHeight: 1.15, color: "var(--text-strong)" }}>{m.title}</h3>
                   <p style={{ margin: 0, minHeight: "calc(13.5px * 1.5 * 3)", fontFamily: "var(--font-body)", fontSize: "13.5px", lineHeight: 1.5, color: "var(--text-muted)" }}>{m.desc || ""}</p>
+                  {macros && (
                   <div style={{ display: "flex", gap: "12px", marginTop: "auto", borderTop: "1px solid var(--border-subtle)", paddingTop: "14px" }}>
                     {stat(num(m.kcal), "kcal", true)}{stat(num(m.p, "g"), "protein")}{stat(num(m.c, "g"), "carbs")}{stat(num(m.f, "g"), "fat")}
                   </div>
+                  )}
                 </div>
               </div>
             ))}
@@ -1079,17 +1082,17 @@ function CatOccasions() {
 // Card style = the site's PlanMenu meal cards. Bowl photo is a 31 Oct greens bowl,
 // jar photo is the chia pudding jar: swap for Irina's catering shots (microbiome bowl, salad jars).
 const HK_CAT_SERVED = [
-  { kind: "Bowls", title: "Microbiome bowls", img: "serve-bowl.jpg", ratio: "4 / 3", desc: "Greens, fermented vegetables and fibre-rich grains, in a bowl for each guest." },
-  { kind: "Jars", title: "Salads and puddings in small jars", img: "serve-jars.jpg", ratio: "4 / 3", desc: "Easy to pick up, easy to carry, and no plates needed." },
+  { kind: "Bowls", title: "Signature bowls", img: "serve-bowl.jpg", ratio: "4 / 3", desc: "Pharmacy and Blue Zones bowls: colourful, filling and gut-friendly, one for each guest." },
+  { kind: "Jars", title: "Salads and puddings in jars", img: "serve-jars.jpg", ratio: "4 / 3", desc: "Individual jars, easy to pick up and carry. Add chicken, salmon, prawns or egg to any salad." },
   { kind: "Finger food", title: "Healthy bites", img: "serve-finger.jpg", ratio: "4 / 3", desc: "Sugar-free sweet bites and gluten-free savoury pieces, in place of pastries." },
 ];
 
 function CatServe() {
   React.useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, []);
   const swaps = [
-    ["croissants and canapés", "gluten-free mini zucchini pancakes and mini waffles"],
-    ["cakes and sweets", "cacao nut balls, coconut mini balls and keto brownie bites"],
-    ["heavy buffet trays", "microbiome bowls and salads in small jars"],
+    ["croissants and canapés", "gluten-free zucchini pancakes and waffles with smoked salmon"],
+    ["cakes and sweets", "cacao nut balls, matcha balls and keto brownie bites"],
+    ["heavy buffet trays", "Pharmacy bowls and salads in jars"],
   ];
   return (
     <section style={{ background: "var(--surface-card)", borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" }}>
@@ -1133,41 +1136,45 @@ function CatServe() {
   );
 }
 
-/* ---------- Menu (live PlanMenu component, with tabs, 4:3 photos) ---------- */
-// Dish names exactly as in the brief. Publish only verified dishes. Photos: HK shoots and the
-// live site's own meal photos where they show the same dish; the rest show PlanMenu's placeholder.
+/* ---------- Menu (live PlanMenu card design, no nutrition) ---------- */
+// Names and descriptions supplied by Healthy Kitchen (26 Nov). Nutrition is not shown on
+// catering because values aren't available for every dish. Photos: live-site photos of the
+// same dishes where they exist, 31 Oct shoot / Anika's photos otherwise; all levelled to the
+// same size. Grapefruit & Fennel Salad has no photo yet.
 const HK_CAT_MENU = [
   { label: "Finger Foods", meals: [
-    { meal: "Finger food", title: "GF Mini Zucchini Pancakes with Salmon", img: HK_IMG("norm-dish-zucchini-pancakes.jpg"), desc: "Small gluten-free pancakes, easy to eat while you mingle.", kcal: 364, p: 22, c: 24, f: 20 },
-    { meal: "Finger food", title: "GF Mini Waffles with Salmon & Guacamole", img: HK_IMG("norm-aip-breakfast.jpg"), desc: "Gluten-free waffles with smoked salmon and guacamole.", kcal: 409, p: 18, c: 28, f: 25 },
-    { meal: "Finger food", title: "Chia Pudding with Mango", img: HK_IMG("dish-chia-pudding.jpg"), desc: "Served in small individual jars." },
-    { meal: "Finger food", title: "Cacao Nut Balls", img: HK_IMG("norm-dish-cacao-balls.jpg"), desc: "A sugar-free sweet bite." },
-    { meal: "Finger food", title: "Coconut Mini Balls", img: HK_IMG("norm-mu-low-snack-1.jpg"), desc: "A sugar-free sweet bite.", kcal: 232, p: 3.9, c: 17, f: 15 },
-    { meal: "Finger food", title: "Keto Brownie Bites", img: HK_IMG("norm-dish-brownie-bites.jpg"), desc: "Rich, sugar-free brownie in small squares." },
+    { meal: "Savoury", title: "Zucchini Pancakes with Smoked Salmon & Coconut Yogurt Sauce", img: HK_IMG("norm-dish-zucchini-pancakes.jpg"), desc: "Golden, gluten-free zucchini pancakes topped with smoked salmon and a cool coconut yogurt sauce. Easy to pick up while guests mingle." },
+    { meal: "Savoury", title: "Waffles with Smoked Salmon & Guacamole", img: HK_IMG("norm-aip-breakfast.jpg"), desc: "Crisp gluten-free waffles with smoked salmon and fresh guacamole. A savoury bite that disappears fast." },
+    { meal: "Sweet", title: "Chia Pudding with Mango", img: HK_IMG("dish-chia-pudding.jpg"), desc: "Creamy chia set in coconut milk, topped with fresh mango and goji berries. A light, fresh sweet bite with no refined sugar." },
+    { meal: "Sweet", title: "Microbiome Bowl", img: HK_IMG("norm-ac-snack-2.jpg"), desc: "Chia pudding and coconut yogurt with berry jam, topped with fresh berries, pomegranate seeds and crushed flax seeds. Colourful, creamy and gut-friendly." },
+    { meal: "Sweet", title: "Cacao Nut Balls", img: HK_IMG("norm-dish-cacao-balls.jpg"), desc: "Bite-size truffles of rich cacao and hazelnut. The sweet everyone reaches for, made without flour or refined sugar." },
+    { meal: "Sweet", title: "Coconut Balls", img: HK_IMG("norm-mu-low-snack-1.jpg"), desc: "Soft, bite-size coconut balls. A light, tropical sweet to pass around." },
+    { meal: "Sweet", title: "Matcha Balls", img: HK_IMG("norm-mu-high-snack-1.jpg"), desc: "Our coconut balls with a twist of matcha green tea. Fragrant, gently earthy and a beautiful green on the table." },
+    { meal: "Sweet", title: "Keto Brownie Bites", img: HK_IMG("norm-dish-brownie-bites.jpg"), desc: "Fudgy little squares made with almond and macadamia butter and 100% cacao. Deeply chocolatey, low in carbs, and gone in minutes." },
+    { meal: "Sweet", title: "Hazelnut Cake Bites", img: HK_IMG("norm-gut-snack.jpg"), desc: "Little hazelnut cakes made with whole foods, with no flour and no refined sugar. A rich, nutty bite to finish on." },
   ] },
-  { label: "Mains", meals: [
-    { meal: "Main", title: "Microbiome Bowl", img: HK_IMG("norm-dish-microbiome-bowl.jpg"), desc: "Fermented foods, fibre and many kinds of vegetables." },
-    { meal: "Main", title: "Konjac Pasta with Pesto & Chicken", img: HK_IMG("norm-aip-dinner.jpg"), desc: "Individual portions or to share.", kcal: 436, p: 43, c: 12, f: 24 },
-    { meal: "Main", title: "Wild Salmon with Broccoli", img: HK_IMG("norm-dish-wild-salmon-broccoli.jpg"), desc: "Individual portions or to share." },
-    { meal: "Main", title: "Kale Pumpkin Quinoa Salad with Organic Chicken", img: HK_IMG("norm-dish-kale-pumpkin-salad.jpg"), desc: "Also served in small jars." },
-    { meal: "Main", title: "Kale Beetroot Quinoa Salad with Organic Chicken", img: HK_IMG("norm-dish-kale-beetroot-salad.jpg"), desc: "Also served in small jars." },
-    { meal: "Main", title: "Turkey Stroganoff with Mushrooms & Quinoa", img: HK_IMG("norm-dish-turkey-stroganoff.jpg"), desc: "Individual portions or to share." },
-    { meal: "Main", title: "Blue Zones Bowl", img: HK_IMG("norm-dish-blue-zones-bowl.jpg"), desc: "Individual bowls for each guest." },
-    { meal: "Main", title: "Healthy Caesar Salad with Organic Chicken & Cashew Mayo", img: HK_IMG("norm-dish-caesar-salad.jpg"), desc: "Individual portions or to share." },
-    { meal: "Main", title: "Longevity Salad", img: HK_IMG("norm-dish-longevity-salad.jpg"), desc: "Individual portions or to share." },
+  { label: "Salads in Jars", note: "Served in individual jars, easy to pick up and carry. Add protein to any salad: chicken, salmon, prawns or egg.", meals: [
+    { meal: "Salad", title: "Pharmacy Bowl", img: HK_IMG("norm-gut-lunch.jpg"), desc: "Our signature bowl: quinoa, broccoli, sweet potato and spinach with naturally fermented sauerkraut and a sesame dressing. Colourful, filling and gut-friendly." },
+    { meal: "Salad", title: "Grapefruit & Fennel Salad", desc: "Crisp fennel and spinach with juicy grapefruit and creamy avocado. Light, fresh and bright." },
+    { meal: "Salad", title: "Wild Rice Salad with Vegan Cheese", img: HK_IMG("norm-ed-lunch.jpg"), desc: "Nutty wild rice with vegan cheese. A hearty, satisfying salad that holds beautifully in a jar." },
+    { meal: "Salad", title: "Kale Beetroot Salad with Quinoa", img: HK_IMG("norm-dish-kale-beetroot-salad.jpg"), desc: "Earthy beetroot, kale and quinoa. Vibrant, colourful and satisfying." },
+    { meal: "Salad", title: "Kale Pumpkin Salad with Quinoa", img: HK_IMG("norm-dish-kale-pumpkin-salad.jpg"), desc: "Kale, sweet pumpkin and quinoa. A hearty, colourful salad that travels well." },
+    { meal: "Salad", title: "Blue Zones Bowl", img: HK_IMG("norm-dish-blue-zones-bowl.jpg"), desc: "Inspired by the world's longest-living communities: golden beetroot, quinoa, kale and pomegranate with vegan feta. A bowl that looks as good as it tastes." },
+    { meal: "Salad", title: "Healthy Caesar Salad with Cashew Mayo", img: HK_IMG("norm-dish-caesar-salad.jpg"), desc: "The classic everyone loves, made lighter: crisp iceberg, tomato and vegan parmesan with a creamy, dairy-free cashew mayo." },
+    { meal: "Salad", title: "Longevity Salad", img: HK_IMG("norm-dish-longevity-salad.jpg"), desc: "A colourful, plant-rich salad inspired by the way the world's longest-living people eat. Fresh, light and full of variety." },
   ] },
-  { label: "Drinks", meals: [
-    { meal: "Drink", title: "Super Duper detox juice", img: HK_IMG("norm-dc-drink-1.jpg"), desc: "Cold-pressed and bottled. Drinks list to confirm with your quote.", kcal: 171, p: 4, c: 30, f: 1 },
-    { meal: "Drink", title: "Glowing skin juice", img: HK_IMG("norm-dc-drink-3.jpg"), desc: "Cold-pressed and bottled.", kcal: 241, p: 4, c: 48, f: 1 },
-    { meal: "Drink", title: "Lean green smoothie", img: HK_IMG("norm-ed-drink-2.jpg"), desc: "Bottled smoothie, sugar-free.", kcal: 179, p: 4, c: 25, f: 7 },
-    { meal: "Drink", title: "Matcha wake up smoothie", img: HK_IMG("norm-dc-drink-2.jpg"), desc: "Bottled smoothie, sugar-free.", kcal: 70, p: 1, c: 14, f: 0 },
+  { label: "Main Meals", note: "Individual portions or to share.", meals: [
+    { meal: "Main", title: "Wild Salmon with Broccoli", img: HK_IMG("norm-longevity-dinner.jpg"), desc: "Tender wild salmon with bright green broccoli. Rich in omega-3 and light enough for a working lunch." },
+    { meal: "Main", title: "Turkey Stroganoff with Mushrooms & Buckwheat", img: HK_IMG("norm-dish-turkey-stroganoff.jpg"), desc: "A lighter take on the comfort classic: lean turkey and mushrooms in a creamy, dairy-free coconut yogurt sauce, served on naturally gluten-free buckwheat." },
+    { meal: "Main", title: "Fried Cauliflower Rice with Prawns", img: HK_IMG("norm-ac-dinner.jpg"), desc: "Light cauliflower rice fried with egg, ginger, miso and tamari, topped with juicy prawns. All the flavour of fried rice, without the heaviness." },
+    { meal: "Main", title: "Seabass with Multicoloured Vegetables & Sweet Potato Wedges", img: HK_IMG("norm-mu-high-dinner.jpg"), desc: "Delicate seabass with tomato, onion, olives and broccoli, served with sweet potato wedges. A light, Mediterranean-style plate." },
   ] },
 ];
 
 function CatMenu() {
   return (
     <>
-      <HkMenu menus={HK_CAT_MENU} eyebrow="Menu preview" title="A taste of the menu" sub="Finger food, mains and drinks, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
+      <HkMenu menus={HK_CAT_MENU} macros={false} eyebrow="Menu preview" title="A taste of the menu" sub="Finger food, salads in jars and main meals, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
       <HkStatBand stats={[
         { val: "100%", label: "Gluten-free" },
         { val: "0g", label: "Added sugar" },
@@ -1361,7 +1368,7 @@ function ProtoApp() {
       <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
       <main><Catering /></main>
       <Footer onNav={handleNav} onHome={() => go("/")} />
-      <ProtoNotes notes={["Layout now copies live pages: plan-page hero, numbered differentiators, two-column occasion cards with 16:9 photos (as on Consultations), the live menu carousel with 4:3 photos, green three-card band, Questions & Answers.","“Fully gluten-free” and “sugar-free” are Natalia's words. Irina's brief says not to claim this unless every dish is verified, so Irina must confirm before publishing. Anti-Candida is left out on purpose (Natalia).","New photos from the 31 Oct shoot: hero (overhead table of dishes) and Corporate Events (long table of varied dishes). Private gathering and special occasion are earlier HK shoots; Wellness Retreats is an HK yoga shot, not a real retreat. Ask Natalia/Irina for her book and past-event photos.","New menu photo from the Yandex archive: kale beetroot quinoa salad (Dec 2024 phone shot; no chicken in the photo). From the live site: Microbiome Bowl (the live “Pharmacy bowl” photo, which the brief suggests renaming), konjac pasta (live photo shows salmon, not chicken) and the drinks. Irina to confirm each matches the catering version.","Top-down finger-food photos are turned sideways to fit the site's 4:3 cards without zooming in. The brownie photo is a close-up; a wider shot would be better.","PHOTOS ARE GUESSES, TO CONFIRM: from Natalia's 31 Oct folder (no dish names on the files), matched by what's on the plate. Microbiome Bowl = DSC06168, Turkey Stroganoff = DSC05949, Kale Beetroot Quinoa Salad = DSC06071, Wild Salmon with Broccoli = DSC06108, Blue Zones Bowl = DSC06212, Longevity Salad = DSC06240, Chia Pudding with Mango and Cacao Nut Balls = photos supplied directly by Anika (25 Nov). Confirm the chia jar photo is Healthy Kitchen's own before publishing. Healthy Caesar Salad uses a STAND-IN: the 31 Oct green salad bowl DSC05905 (rocket, broccoli, courgette; no chicken). No real Caesar photo exists anywhere; replace when one is shot. Zucchini pancakes photo = the meal-plan delivery box (Yandex /june/photo/75EDD6F6….JPG), chosen over the close-up; no finger-food version exists. Kcal/macros for Microbiome Bowl and Wild Salmon removed until the kitchen confirms them for these dishes.","All menu photos are levelled: each dish centred at the same size, background extended in its own tones where needed. Keto Brownie Bites uses the photo supplied by Anika (25 Nov); confirm it's Healthy Kitchen's own. Chia Pudding keeps Anika's jar photo unchanged.","Nutrition still missing (kitchen to supply kcal/protein/carbs/fat): Chia Pudding with Mango, Cacao Nut Balls, Keto Brownie Bites, Microbiome Bowl, Wild Salmon with Broccoli, Kale Pumpkin Quinoa Salad, Kale Beetroot Quinoa Salad, Turkey Stroganoff, Blue Zones Bowl, Healthy Caesar Salad, Longevity Salad. Values shown for zucchini pancakes, mini waffles, coconut balls and konjac pasta are the live meal-plan versions; confirm for catering portions.","Drinks list is a sample from the live plans; confirm the catering drinks. Stat strip and FAQ answers need Irina's confirmation. Page name “Gut Smart Catering” still to confirm.","Reviews section uses the live site's existing Healthy Kitchen customer reviews. The brief asks for real catering reviews only, so swap these for catering reviews when Irina has them, or hide the section.","Kcal and macros come from the live site where it's the same dish, at the full plan portion size; catering portions may differ. “–” means no nutrition data yet: kitchen to supply.","Menu cards are now the same size as the live site (298×224 photos, no inner margin). Mini waffles and coconut balls use the live site's own photos of those dishes. Zucchini pancakes and cacao balls are zoomed out with the background extended. Brownie bites and kale beetroot salad are close-ups with food touching the edges: Irina to supply wider shots. The enquiry form sends nothing."]} />
+      <ProtoNotes notes={["Layout copies live pages: plan-page hero, numbered differentiators, two-column occasion cards (as on Consultations), the live menu carousel, green three-card band, reviews, Questions & Answers.","Menu text = Healthy Kitchen's own dish list (26 Nov): Finger Foods (savoury and sweet), Salads in Jars, Main Meals. Nutrition values are not shown on catering. Drinks and Konjac Pasta are no longer listed.","Photos from the live site's matching dishes: waffles, Microbiome Bowl, coconut balls, matcha balls, hazelnut cake, Pharmacy Bowl, wild rice salad, wild salmon, fried cauliflower rice, seabass. Chia pudding, cacao nut balls and keto brownie use Anika's photos (confirm they're Healthy Kitchen's own).","PHOTOS STILL GUESSES (31 Oct shoot, no dish names on the files): Kale Beetroot Salad, Kale Pumpkin Salad, Blue Zones Bowl, Turkey Stroganoff, Longevity Salad. Healthy Caesar uses a stand-in green salad (no real Caesar photo exists). Grapefruit & Fennel Salad has no photo.","All menu photos are levelled: each dish centred at the same size; where a photo was too tight, its background was extended.","“Fully gluten-free” and “sugar-free” are Natalia's words; Irina to confirm against every dish. Anti-Candida left out on purpose (Natalia).","Occasion photos: corporate table and hero (hands serving) from the 31 Oct shoot; private gathering and special occasion from earlier HK shoots; Wellness Retreats is an HK yoga shot, not a real retreat.","Reviews section uses the live site's general Healthy Kitchen reviews; swap for catering reviews when available. The enquiry form sends nothing yet. Page name “Gut Smart Catering” still to confirm."]} />
     </>
   );
 }
