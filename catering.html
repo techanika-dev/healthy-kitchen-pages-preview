@@ -1055,7 +1055,7 @@ const HK_CAT_PILLARS = [
   { n: "01", icon: "wheat-off", h: "Fully gluten-free", p: "Gluten-free from the first bite to the last, so it's safe for guests with celiac disease. Nobody needs a separate plate." },
   { n: "02", icon: "sprout", h: "Gut-friendly by design", p: "Fermented foods, fibre-rich ingredients and many kinds of vegetables in every menu, with microbiome bowls at the centre of the table." },
   { n: "03", icon: "clipboard-check", h: "Ready for special protocols", p: "AIP-friendly and Low FODMAP options, all sugar-free, for guests following a protocol or avoiding certain foods." },
-  { n: "04", icon: "salad", h: "Served the healthy way", p: "Microbiome bowls, salads in small jars and healthy finger food: small, easy portions instead of pastries and processed canapés." },
+  { n: "04", icon: "salad", h: "Served the healthy way", p: "Microbiome bowls, fresh salads and healthy finger food: small, easy portions instead of pastries and processed canapés." },
 ];
 
 function CatPillars() {
@@ -1068,7 +1068,7 @@ function CatPillars() {
 // HK shoots; the retreat photo is an HK wellness shot, not a real retreat (ask Irina/Natalia).
 const HK_CAT_OCCASIONS = [
   { badge: "Corporate", title: "Corporate Events", img: HK_IMG("cat-corporate.jpg"), body: "Team lunches, board meetings, launches and wellness days. A table of varied dishes that everyone in the room can eat, whatever their diet.", perks: ["Individual portions or a shared table", "Every dish labelled for dietary needs"] },
-  { badge: "At home", title: "Private Gatherings", img: HK_IMG("cat-private.jpg"), body: "Dinners, family celebrations and weekend brunches at home, beautifully arranged and ready to serve.", perks: ["Sharing platters, bowls and jars", "Menus planned around your guests"] },
+  { badge: "At home", title: "Private Gatherings", img: HK_IMG("cat-private.jpg"), body: "Dinners, family celebrations and weekend brunches at home, beautifully arranged and ready to serve.", perks: ["Sharing platters and bowls", "Menus planned around your guests"] },
   { badge: "Wellness", title: "Wellness Retreats", img: HK_IMG("cat-retreat.jpg"), pos: "50% 35%", body: "Yoga days, retreat weekends and studio events, with food as thoughtful as the programme itself.", perks: ["Light, gut-friendly menus", "AIP and Low FODMAP on request"] },
   { badge: "Celebrations", title: "Special Occasions", img: HK_IMG("cat-occasion-v6.jpg"), body: "Birthdays, baby showers and milestones, with sugar-free sweet treats that every guest can share.", perks: ["Healthy finger food", "Sugar-free desserts"] },
 ];
@@ -1080,10 +1080,10 @@ function CatOccasions() {
 
 /* ---------- Your event, your menu (AboutStory pattern + presentation cards) ---------- */
 // Card style = the site's PlanMenu meal cards. Bowl photo is a 31 Oct greens bowl,
-// jar photo is the chia pudding jar: swap for Irina's catering shots (microbiome bowl, salad jars).
+// salads card photo is the chia pudding: swap for Irina's catering shots (microbiome bowl, salads).
 const HK_CAT_SERVED = [
   { kind: "Bowls", title: "Signature bowls", img: "serve-bowl.jpg", ratio: "4 / 3", desc: "Pharmacy and Blue Zones bowls: colourful, filling and gut-friendly, one for each guest." },
-  { kind: "Jars", title: "Salads and puddings in jars", img: "serve-jars.jpg", ratio: "4 / 3", desc: "Individual jars, easy to pick up and carry. Add chicken, salmon, prawns or egg to any salad." },
+  { kind: "Salads", title: "Salads and puddings", img: "serve-jars.jpg", ratio: "4 / 3", desc: "Individual portions, easy to pick up and carry. Add chicken, salmon, prawns or egg to any salad." },
   { kind: "Finger food", title: "Healthy bites", img: "serve-finger.jpg", ratio: "4 / 3", desc: "Sugar-free sweet bites and gluten-free savoury pieces, in place of pastries." },
 ];
 
@@ -1092,7 +1092,7 @@ function CatServe() {
   const swaps = [
     ["croissants and canapés", "gluten-free zucchini pancakes and waffles with smoked salmon"],
     ["cakes and sweets", "cacao nut balls, matcha balls and keto brownie bites"],
-    ["heavy buffet trays", "Pharmacy bowls and salads in jars"],
+    ["heavy buffet trays", "Pharmacy bowls and fresh salads"],
   ];
   return (
     <section style={{ background: "var(--surface-card)", borderTop: "1px solid var(--border-subtle)", borderBottom: "1px solid var(--border-subtle)" }}>
@@ -1153,10 +1153,10 @@ const HK_CAT_MENU = [
     { meal: "Sweet", title: "Keto Brownie Bites", img: HK_IMG("norm-dish-brownie-bites-v4.jpg"), desc: "Fudgy little squares made with almond and macadamia butter and 100% cacao. Deeply chocolatey, low in carbs, and gone in minutes." },
     { meal: "Sweet", title: "Hazelnut Cake Bites", img: HK_IMG("norm-dish-hazelnut-cake-v4.jpg"), desc: "Little hazelnut cakes made with whole foods, with no flour and no refined sugar. A rich, nutty bite to finish on." },
   ] },
-  { label: "Salads in Jars", note: "Served in individual jars, easy to pick up and carry. Add protein to any salad: chicken, salmon, prawns or egg.", meals: [
+  { label: "Salads", note: "Served as individual portions, easy to pick up and carry. Add protein to any salad: chicken, salmon, prawns or egg.", meals: [
     { meal: "Salad", title: "Pharmacy Bowl", img: HK_IMG("norm-dish-pharmacy-bowl-v5.jpg"), desc: "Our signature bowl: quinoa, broccoli, sweet potato and spinach with naturally fermented sauerkraut and a sesame dressing. Colourful, filling and gut-friendly." },
     { meal: "Salad", title: "Grapefruit & Fennel Salad", img: HK_IMG("norm-dish-grapefruit-fennel-v3.jpg"), desc: "Crisp fennel and spinach with juicy grapefruit and creamy avocado. Light, fresh and bright." },
-    { meal: "Salad", title: "Wild Rice Salad with Vegan Cheese", img: HK_IMG("norm-dish-wild-rice-salad-v5.jpg"), desc: "Nutty wild rice with vegan cheese. A hearty, satisfying salad that holds beautifully in a jar." },
+    { meal: "Salad", title: "Wild Rice Salad with Vegan Cheese", img: HK_IMG("norm-dish-wild-rice-salad-v5.jpg"), desc: "Nutty wild rice with vegan cheese. A hearty, satisfying salad that travels well." },
     { meal: "Salad", title: "Kale Beetroot Salad with Quinoa", img: HK_IMG("norm-dish-kale-beetroot-salad-v3.jpg"), desc: "Earthy beetroot, kale and quinoa. Vibrant, colourful and satisfying." },
     { meal: "Salad", title: "Kale Pumpkin Salad with Quinoa", img: HK_IMG("norm-dish-kale-pumpkin-salad-v5.jpg"), desc: "Kale, sweet pumpkin and quinoa. A hearty, colourful salad that travels well." },
     { meal: "Salad", title: "Blue Zones Bowl", img: HK_IMG("norm-dish-blue-zones-bowl-v5.jpg"), desc: "Inspired by the world's longest-living communities: golden beetroot, quinoa, kale and pomegranate with vegan feta. A bowl that looks as good as it tastes." },
@@ -1174,7 +1174,7 @@ const HK_CAT_MENU = [
 function CatMenu() {
   return (
     <>
-      <HkMenu menus={HK_CAT_MENU} macros={false} eyebrow="Menu preview" title="A taste of the menu" sub="Finger food, salads in jars and main meals, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
+      <HkMenu menus={HK_CAT_MENU} macros={false} eyebrow="Menu preview" title="A taste of the menu" sub="Finger food, salads and main meals, all gluten-free and sugar-free. AIP and Low FODMAP versions on request; your final menu is confirmed with your quote." />
       <HkStatBand stats={[
         { val: "100%", label: "Gluten-free" },
         { val: "0g", label: "Added sugar" },
@@ -1204,7 +1204,7 @@ const HK_CAT_FAQ = [
   { q: "Is every dish gluten-free and sugar-free?", a: "Yes. Our catering menu is gluten-free and made without sugar, so it suits guests with celiac disease and those avoiding sugar." },
   { q: "Can you cater for AIP or Low FODMAP guests?", a: "Yes. Tell us about your guests' needs when you enquire and we'll plan AIP-friendly and Low FODMAP options alongside the main menu." },
   { q: "How much does catering cost?", a: "Every event is quoted individually, based on the menu, number of guests and serving style. Send an enquiry and we'll come back with a tailored quote." },
-  { q: "Can food be served as individual portions?", a: "Yes. Choose individual portions, a shared buffet, or bowls and small jars, whichever suits your event." },
+  { q: "Can food be served as individual portions?", a: "Yes. Choose individual portions, a shared buffet, or individual bowls, whichever suits your event." },
   { q: "Where do you deliver?", a: "We deliver across Dubai. Everything is made fresh on the day of your event." },
 ];
 
@@ -1297,7 +1297,7 @@ function CatEnquiry() {
                   <option>Up to 20</option><option>20–50</option><option>50–100</option><option>100+</option>
                 </Input>
               </div>
-              <CatChoice label="Serving style" value={style} onChange={setStyle} options={["Individual portions", "Buffet", "Bowls and jars", "Not sure yet"]} />
+              <CatChoice label="Serving style" value={style} onChange={setStyle} options={["Individual portions", "Buffet", "Bowls", "Not sure yet"]} />
               <CatChoice multi label="Your guests' dietary needs" value={diets} onChange={setDiets} options={["Gut-friendly", "Gluten-free / celiac", "Sugar-free", "AIP", "Low FODMAP", "Other allergies"]} />
               <Input label="Anything else" id="cat-notes" name="notes" as="textarea" placeholder="Allergies, intolerances, venue, timings…" />
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", flexWrap: "wrap", paddingTop: "18px", borderTop: "1px solid var(--border-subtle)" }}>
@@ -1368,7 +1368,7 @@ function ProtoApp() {
       <Header cartCount={0} onNav={handleNav} onHome={() => go("/")} onCart={() => go("/")} onSelectPlan={(p) => go("/meal-plans/" + p.slug)} />
       <main><Catering /></main>
       <Footer onNav={handleNav} onHome={() => go("/")} />
-      <ProtoNotes notes={["Layout copies live pages: plan-page hero, numbered differentiators, two-column occasion cards (as on Consultations), the live menu carousel, green three-card band, reviews, Questions & Answers.","Menu text = Healthy Kitchen's own dish list (26 Nov): Finger Foods (savoury and sweet), Salads in Jars, Main Meals. Nutrition values are not shown on catering. Drinks and Konjac Pasta are no longer listed.","Photos from the live site's matching dishes: waffles, Microbiome Bowl, coconut balls, matcha balls, hazelnut cake, Pharmacy Bowl, wild rice salad, wild salmon, fried cauliflower rice, seabass. Chia pudding, cacao nut balls and keto brownie use Anika's photos (confirm they're Healthy Kitchen's own).","Anika's photos (27 Nov) now cover every salad except Grapefruit & Fennel and Kale Beetroot (also Anika's, earlier set), plus coconut balls, matcha balls and waffles. Healthy Caesar shows the roasted broccoli, zucchini and rocket bowl from Anika's set: confirm it is the Caesar. Turkey Stroganoff is the real dish from the Oct 2024 table shoot, cut out onto a plain background. Hazelnut Cake Bites shows a whole hazelnut cake (no bite-size photo exists).","All menu photos are levelled with no blur: each dish centred at the same size; where a photo was too tight, its own flat background colour was extended. Chia pudding, keto brownie, cacao nut balls, zucchini pancakes, Microbiome Bowl and hazelnut cake use Anika's studio photos (27 Nov).","“Fully gluten-free” and “sugar-free” are Natalia's words; Irina to confirm against every dish. Anti-Candida left out on purpose (Natalia).","Occasion photos: corporate table and hero (hands serving) from the 31 Oct shoot; private gathering from an earlier HK shoot; special occasion is guests sharing an HK brunch spread (Oct 2024 shoot; no real party photo exists); Wellness Retreats is an HK yoga shot, not a real retreat.","Reviews section uses the live site's general Healthy Kitchen reviews; swap for catering reviews when available. The enquiry form sends nothing yet. Page name “Gut Smart Catering” still to confirm."]} />
+      <ProtoNotes notes={["Layout copies live pages: plan-page hero, numbered differentiators, two-column occasion cards (as on Consultations), the live menu carousel, green three-card band, reviews, Questions & Answers.","Menu text = Healthy Kitchen's own dish list (26 Nov): Finger Foods (savoury and sweet), Salads, Main Meals. No mention of jars (per Anika, 27 Nov). Nutrition values are not shown on catering. Drinks and Konjac Pasta are no longer listed.","Photos from the live site's matching dishes: waffles, Microbiome Bowl, coconut balls, matcha balls, hazelnut cake, Pharmacy Bowl, wild rice salad, wild salmon, fried cauliflower rice, seabass. Chia pudding, cacao nut balls and keto brownie use Anika's photos (confirm they're Healthy Kitchen's own).","Anika's photos (27 Nov) now cover every salad except Grapefruit & Fennel and Kale Beetroot (also Anika's, earlier set), plus coconut balls, matcha balls and waffles. Healthy Caesar shows the roasted broccoli, zucchini and rocket bowl from Anika's set: confirm it is the Caesar. Turkey Stroganoff is the real dish from the Oct 2024 table shoot, cut out onto a plain background. Hazelnut Cake Bites shows a whole hazelnut cake (no bite-size photo exists).","All menu photos are levelled with no blur: each dish centred at the same size; where a photo was too tight, its own flat background colour was extended. Chia pudding, keto brownie, cacao nut balls, zucchini pancakes, Microbiome Bowl and hazelnut cake use Anika's studio photos (27 Nov).","“Fully gluten-free” and “sugar-free” are Natalia's words; Irina to confirm against every dish. Anti-Candida left out on purpose (Natalia).","Occasion photos: corporate table and hero (hands serving) from the 31 Oct shoot; private gathering from an earlier HK shoot; special occasion is guests sharing an HK brunch spread (Oct 2024 shoot; no real party photo exists); Wellness Retreats is an HK yoga shot, not a real retreat.","Reviews section uses the live site's general Healthy Kitchen reviews; swap for catering reviews when available. The enquiry form sends nothing yet. Page name “Gut Smart Catering” still to confirm."]} />
     </>
   );
 }
